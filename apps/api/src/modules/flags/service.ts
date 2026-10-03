@@ -29,3 +29,9 @@ export function evaluateFlag(flag: FlagDefinition, ctx: FlagContext): boolean {
   if (c.locales?.length && (!ctx.locale || !c.locales.includes(ctx.locale))) return false;
   return bucketOf(flag.key, ctx.subject) < flag.rollout_percent;
 }
+
+/** Server-side check of one flag for one user. Unknown flags are off. */
+export async function isFlagOn(db: import('../../db/database.js').DB, key: string, ctx: FlagContext): Promise<boolean> {
+  const flag = await db.selectFrom('feature_flags').select(['key', 'enabled', 'rollout_percent', 'conditions']).where('key', '=', key).executeTakeFirst();
+  return flag ? evaluateFlag(flag, ctx) : false;
+}

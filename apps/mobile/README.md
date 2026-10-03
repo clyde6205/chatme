@@ -6,7 +6,8 @@ It is intentionally outside the pnpm workspace until it is rebuilt on `@chatme/c
 
 - `assets/icon.png`, `splash.png`, `favicon.png` are empty files; `adaptive-icon.png` is not a valid image.
 - Release builds are signed with the debug keystore.
-- Package id disagrees between `app.json` (`com.clyde6205.chatmepro`), Gradle (`com.chatmepro`) and Kotlin sources.
 - Stream Chat and `react-native-voice` dependencies are unused; Stream conflicts with the owned, provider-neutral chat backend.
+
+Android application id: **`pro.chatme.app`** (permanent; it is the Play Store identity). `app.json`, Gradle `namespace`/`applicationId` and the Kotlin package all use it, and `pnpm check:android-id` fails CI if any of them drift. Do not change it without explicit authorization from the product owner.
 
 Run (requires Android SDK): `npm install && npx expo run:android`.

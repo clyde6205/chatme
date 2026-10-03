@@ -13,7 +13,8 @@
     "db:migrate": "pnpm --filter @chatme/api migrate",
     "dev:api": "pnpm --filter @chatme/api dev",
     "dev:web": "pnpm --filter @chatme/web dev",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "check:android-id": "node scripts/check-android-id.mjs"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

@@ -1,4 +1,4 @@
-package com.clyde6205.chatmepro
+package pro.chatme.app
 
 import android.os.Build
 import android.os.Bundle

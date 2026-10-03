@@ -1,51 +1,68 @@
 # Phase 1 status
 
-Last updated: 2026-10-03. Categories follow the build directive: a capability is only listed as verified when it was actually exercised.
+Last updated: 2026-10-03. Every item sits in the highest category it has actually reached:
 
-## Implemented
+- **IMPLEMENTED**: code exists.
+- **TESTED LOCALLY**: automated tests passed in the build environment against real PostgreSQL 16 and headless Chromium.
+- **MOCK VERIFIED**: exercised against a local server that implements the external provider's documented API.
+- **INTEGRATION VERIFIED**: exercised against the real external service with real credentials.
+- **PRODUCTION VERIFIED**: running on the production deployment and checked there.
 
-- Repository hygiene: 45,737 committed `node_modules` files and `.expo/` untracked; Expo app relocated to `apps/mobile`; pnpm workspace.
-- `packages/contracts`: shared Zod request/response schemas, error codes, locale list.
-- `packages/i18n`: 18 locale catalogs (93 strings each), ICU-subset formatter with CLDR plurals, locale negotiation, RTL metadata, catalog validator.
-- `apps/api`: config with production safety checks; PostgreSQL schema and migration (users, identities, credentials, preferences, devices, sessions, audit events, feature flags); register, login, logout, session list, revoke one, revoke others, account deletion; profile and preference updates with atomic JSONB merges; CSRF and CORS; rate limiting; Argon2id; log redaction; audit log; feature flag evaluation (kill switch, rollout %, conditions); health/readiness; Prometheus metrics; client performance ingest; expired-session pruning; graceful shutdown.
-- `apps/web`: installable PWA (manifest, Workbox service worker, offline shell), static pre-JS shell, capability detection with light/standard/rich modes and user override, sign-in, registration, home, profile, settings (language, time zone, performance, privacy, notifications, quiet hours, account deletion), devices screen, offline/online banner, web-vitals telemetry, per-screen and per-locale code splitting, RTL layout.
-- CI workflow: install, lint, typecheck, i18n validation, unit + integration tests on Postgres 16, migration down/up, production builds with web performance budget, dependency audit, Playwright e2e.
-- Docs: architecture assessment, API, database, security, i18n, environment, performance, operations.
+Decisions: Supabase (PostgreSQL), Fly.io (API + WebSockets, primary region `iad`), Vercel (web/PWA), Resend (email), OpenAI behind the AI Gateway, Android id `pro.chatme.app` (permanent).
 
-## Tested (passed locally in the build environment)
+## Summary
 
-| Suite | Count | Notes |
-|---|---|---|
-| contracts unit | 4 | normalisation, strict schemas, telemetry bounds |
-| i18n unit | 21 | formatter, plurals incl. Arabic, negotiation, validator break tests |
-| API integration (real PostgreSQL 16) | 48 | auth, CSRF, CORS, concurrency race, expiry, revocation, deletion, rate limit, DB-down 503, metrics, flags, migrations up/down, log secrecy |
-| web unit | 15 | capability classification, API client error/timeout mapping |
-| e2e (Playwright, built PWA + API + Postgres, 360×640) | 8 | register → profile → reload; duplicate username; Arabic RTL persists; offline reload from service worker; revoke other devices; low-memory → light mode; static shell with JS blocked; slow-3G + 4× CPU cold load 2.4 s |
+| Capability | Status |
+|---|---|
+| Accounts, sessions, devices, profile, preferences, privacy, flags, audit | TESTED LOCALLY |
+| Email verification, forgot/reset password, change password, security notices | TESTED LOCALLY (memory provider) |
+| Resend adapter | MOCK VERIFIED (request shape, auth, idempotency key, error classification, timeouts) |
+| Email outbox (multi-worker, retries, crash recovery) | TESTED LOCALLY |
+| Localized email templates, 18 locales, RTL | TESTED LOCALLY |
+| Realtime WebSockets: auth, ordering, resume, fan-out across two instances, presence, revocation, limits, heartbeats, drain | TESTED LOCALLY (two API instances in one process sharing Postgres) |
+| Web realtime client (backoff, offline, background pause, dead-socket detection) | TESTED LOCALLY (unit) and in e2e (live profile sync, remote sign-out) |
+| AI Gateway + OpenAI adapter | MOCK VERIFIED (streaming, usage, failures); disabled by default |
+| API Docker image | TESTED LOCALLY: built, migrated, booted, health-checked, WebSocket round trip, SIGTERM exit 0, production guard refuses defaults |
+| `fly.toml` | IMPLEMENTED (not deployed) |
+| `vercel.json` headers and SPA routing | TESTED LOCALLY (CSP e2e against the production build); not deployed |
+| Android id `pro.chatme.app` in app.json, Gradle, Kotlin | IMPLEMENTED + CI guard (no Android build run here) |
+| Supabase connection (pooler, direct, TLS verify-full) | IMPLEMENTED; NOT INTEGRATION VERIFIED |
+| Resend delivery to a real inbox | NOT INTEGRATION VERIFIED (needs API key and verified domain) |
+| OpenAI real call | NOT INTEGRATION VERIFIED (needs API key and model choice) |
+| Anything on Fly.io, Vercel, DNS, TLS | NOT VERIFIED: nothing is deployed |
+| Nothing | PRODUCTION VERIFIED |
 
-Mutation check: removing the CSRF check or the ownership filter on session revocation makes 4 API tests fail, so those tests guard real behaviour.
+## Tests (all passing locally)
 
-## Verified against real external systems
+| Suite | Count |
+|---|---|
+| contracts unit | 4 |
+| i18n unit | 21 |
+| API integration, real PostgreSQL 16 | 101 (auth 28, platform 20, email 14, recovery 15, realtime 19, AI 5) |
+| web unit | 23 |
+| e2e, built PWA + API + Postgres, 360×640 Android profile | 12 |
 
-- PostgreSQL 16 (local instance): migrations, all queries, constraints, cascades.
-- Chromium (headless, Playwright): service worker install and offline navigation, RTL rendering, cookie sessions.
+Also run locally: lint, typecheck, i18n validation (0 issues), every migration down to zero and back up, production builds with the web budget (critical path 15.3 KB of 20 KB), `pnpm audit` (0 known vulnerabilities), Docker build and boot, actionlint.
 
-## Not verified / not implemented
+Break tests (each change made the named suite fail, then was reverted): removing single-use token consumption (3 recovery tests), the WebSocket origin check (1), `FOR UPDATE SKIP LOCKED` in the outbox (double send detected), the presence privacy filter (1), the AI flag gate (1), weakening the production CSP (CSP e2e), changing the Android id (guard exits 1). Earlier: CSRF and session-ownership checks.
 
-- **CI on GitHub**: workflow written; see the pull request for whether it has run green.
-- **No deployment exists.** No production hosting, domain (CHATme.pro), TLS, CDN or managed database configured.
-- **Email delivery**: no provider. Email verification and password recovery are NOT IMPLEMENTED (the schema stores `verified_at`).
-- Phone sign-in, passkeys, 2FA: NOT IMPLEMENTED.
-- Push notifications: NOT IMPLEMENTED.
-- Android client rebuild on shared packages, Baseline Profiles, R8 verification, release signing: NOT IMPLEMENTED (existing placeholder app untouched).
-- Physical low-end Android testing: NOT DONE. Performance numbers above are emulated.
-- Translations for 17 non-English locales: drafts, NOT human-reviewed.
-- Accessibility: semantic markup, labels, focus styles and 48 px targets are in place, but no automated axe audit or screen-reader pass has been run.
-- Multi-instance deployment (Redis rate-limit store): NOT IMPLEMENTED.
+## Known gaps
 
-## Phase 1 quality gate: remaining before Phase 2
+- **GitHub Actions does not start** for this repository (startup failure even for a trivial workflow): an account or repository setting, not the code. CI now also builds and boots the API image.
+- Per-IP HTTP rate limits are per instance. Per-account email caps, presence and fan-out are global.
+- Read replicas and additional regions: documented, not built (`docs/deploy-fly.md`).
+- Phone sign-in, passkeys, 2FA, push notifications: NOT IMPLEMENTED.
+- Android client rebuild on shared packages, release signing, Baseline Profiles: NOT IMPLEMENTED; the placeholder app has only its id fixed.
+- Physical low-end Android testing: NOT DONE (emulated throttling only).
+- 17 non-English catalogs, including the new email copy: drafts, NOT human-reviewed.
+- No automated accessibility audit yet.
+- PWA icons are placeholders; brand assets have not been applied.
 
-1. CI green on GitHub.
-2. Choose hosting and deploy API + web to a staging environment.
-3. Email provider + verification/recovery flows.
-4. Android client rebuilt on shared packages with sign-in, running on a low-RAM device.
-5. Automated accessibility checks in e2e.
+## To reach INTEGRATION VERIFIED
+
+1. Supabase project in `us-east-1`: pooler URL, direct URL, CA certificate.
+2. Resend: verified sending domain (`mail.chatme.pro`), API key.
+3. Fly.io: app `chatme-api`, secrets set, `fly deploy`.
+4. Vercel: project on `apps/web`, `VITE_API_URL`, domains.
+5. DNS for `chatme.pro`, `www`, `api`, `mail`.
+6. OpenAI key and a model id, only when the AI assistant should be switched on.

@@ -17,7 +17,7 @@ Phase 1 (Foundation) is in progress. See [docs/architecture-assessment.md](docs/
 | `apps/mobile` | Expo / React Native Android client (pre-existing app, relocated; rebuild planned) |
 | `packages/contracts` | Shared Zod schemas and types for API requests and responses |
 | `packages/i18n` | 18 locale catalogs, ICU-subset formatter, catalog validator |
-| `docs/` | Architecture, database, API, security, i18n, performance, operations |
+| `docs/` | Architecture, database, API, realtime, providers, deploy (Fly.io, Vercel), security, i18n, performance, operations |
 
 ## Quick start
 
@@ -31,10 +31,16 @@ pnpm dev:api                                # http://localhost:8080
 pnpm dev:web                                # http://localhost:5173 (proxies /api to the API)
 ```
 
+## Deploy
+
+- API + WebSockets: Fly.io, `fly deploy` from the repo root (`fly.toml`, `apps/api/Dockerfile`). See [docs/deploy-fly.md](docs/deploy-fly.md).
+- Web/PWA: Vercel project rooted at `apps/web` (`vercel.json`). See [docs/deploy-vercel.md](docs/deploy-vercel.md).
+- Database: Supabase PostgreSQL; email: Resend; AI: OpenAI via the AI Gateway. See [docs/providers.md](docs/providers.md).
+
 ## Quality gates
 
 ```bash
-pnpm lint && pnpm typecheck && pnpm i18n:check
+pnpm lint && pnpm typecheck && pnpm i18n:check && pnpm check:android-id
 TEST_DATABASE_URL=postgres://… pnpm test     # unit + integration against real Postgres
 pnpm build                                   # production builds + web performance budget
 pnpm --filter @chatme/web e2e                # Playwright against the built PWA + API

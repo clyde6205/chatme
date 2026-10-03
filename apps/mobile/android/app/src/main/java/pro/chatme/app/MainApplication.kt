@@ -1,4 +1,4 @@
-package com.clyde6205.chatmepro
+package pro.chatme.app
 
 import android.app.Application
 import android.content.res.Configuration

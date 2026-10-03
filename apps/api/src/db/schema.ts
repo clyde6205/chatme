@@ -148,6 +148,15 @@ export interface RealtimePresenceTable {
   since: Timestamp;
 }
 
+export interface AiUsageTable {
+  user_id: string;
+  day: ColumnType<string, string, string>;
+  requests: ColumnType<number, number | undefined, number>;
+  input_tokens: ColumnType<string, string | number | undefined, string | number>;
+  output_tokens: ColumnType<string, string | number | undefined, string | number>;
+  updated_at: Timestamp;
+}
+
 export interface Database {
   users: UsersTable;
   user_identities: UserIdentitiesTable;
@@ -163,6 +172,7 @@ export interface Database {
   user_events: UserEventsTable;
   realtime_instances: RealtimeInstancesTable;
   realtime_presence: RealtimePresenceTable;
+  ai_usage: AiUsageTable;
 }
 
 export type User = Selectable<UsersTable>;

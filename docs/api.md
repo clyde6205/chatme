@@ -19,7 +19,7 @@ Sessions expire after `SESSION_TTL_DAYS` (default 90) or `SESSION_IDLE_DAYS` of 
 { "error": { "code": "validation_failed", "requestId": "…", "fields": { "email": ["Invalid email"] } } }
 ```
 
-Codes: `validation_failed` 400, `unauthenticated` 401, `invalid_credentials` 401, `csrf_failed` 403, `forbidden` 403, `not_found` 404, `conflict_email` 409, `conflict_username` 409, `rate_limited` 429, `internal` 500, `service_unavailable` 503. Clients translate codes via `errors.<code>` in the i18n catalogs; the API never returns user-facing prose.
+Codes: `validation_failed` 400, `unauthenticated` 401, `invalid_credentials` 401, `invalid_token` 400, `csrf_failed` 403, `forbidden` 403, `not_found` 404, `conflict_email` 409, `conflict_username` 409, `rate_limited` 429, `internal` 500, `service_unavailable` 503. Clients translate codes via `errors.<code>` in the i18n catalogs; the API never returns user-facing prose.
 
 ## Endpoints
 
@@ -28,6 +28,11 @@ Codes: `validation_failed` 400, `unauthenticated` 401, `invalid_credentials` 401
 | POST | `/v1/auth/register` | none | Create account + first session. Body: `registerRequestSchema`. 201. Rate limited per IP+email. |
 | POST | `/v1/auth/login` | none | New session for a new device. Body: `loginRequestSchema`. Rate limited per IP+email. |
 | POST | `/v1/auth/logout` | yes | Revoke the current session. 204. |
+| POST | `/v1/auth/verify-email` | none | Body `{ token }` from the emailed link. Single use, 24 h. 204, or 400 `invalid_token`. |
+| POST | `/v1/auth/verify-email/resend` | yes | New verification link (old ones stop working). Max 5 per hour per account. 204. |
+| POST | `/v1/auth/password/forgot` | none | Body `{ email }`. Always 202 with the same body; work happens after the response so timing reveals nothing. Max 3 emails per hour per account. |
+| POST | `/v1/auth/password/reset` | none | Body `{ token, password }`. Single use, 1 h. Signs out every session, marks the email verified, sends a notice. 204. |
+| POST | `/v1/me/password` | yes | Body `{ currentPassword, newPassword }`. Keeps this session, signs out the others, sends a notice. Returns `{ revokedSessions }`. |
 | GET | `/v1/me` | yes | Current user (`meSchema`). |
 | PATCH | `/v1/me/profile` | yes | `displayName`, `username`, `bio`. Strict schema. |
 | PATCH | `/v1/me/preferences` | yes | `locale`, `timezone`, `performanceMode`, partial `privacy`, partial `notifications`. Partial updates merge atomically. |
@@ -35,10 +40,16 @@ Codes: `validation_failed` 400, `unauthenticated` 401, `invalid_credentials` 401
 | GET | `/v1/sessions` | yes | Active sessions/devices, current one flagged. |
 | DELETE | `/v1/sessions/:id` | yes | Revoke one of your sessions. 204, or 404 if not yours. |
 | POST | `/v1/sessions/revoke-others` | yes | Revoke every session except the current one. Returns `{ revoked }`. |
+| GET | `/v1/realtime` | yes | WebSocket. See `docs/realtime.md`. |
+| POST | `/v1/ai/chat` | yes | AI assistant reply as server-sent events. 404 unless flag `ai.assistant` is on for the user; 429 over the daily token budget; 503 when no provider is configured. |
 | GET | `/v1/flags` | optional | Evaluated feature flags. Query: `installId`, `platform`, `deviceClass`, `locale`. |
 | POST | `/v1/telemetry/perf` | none | Anonymous performance samples (`perfReportSchema`). 202. |
 | GET | `/health/live` | none | Process liveness (no dependency checks). |
-| GET | `/health/ready` | none | Database reachability; 503 when degraded. |
+| GET | `/health/ready` | none | Database reachability and realtime status; 503 when the database is down or the instance is draining. |
 | GET | `/metrics` | `Bearer METRICS_TOKEN` | Prometheus metrics. |
 
 Request and response schemas live in `packages/contracts/src` and are shared by every client.
+
+## Email links
+
+Verification and reset links point at the web app (`WEB_BASE_URL`) with the token in the URL fragment (`/verify-email#token=…`, `/reset-password#token=…`). Fragments are never sent to servers, so tokens do not appear in access logs; the web app removes the fragment from the address bar as soon as it reads it.

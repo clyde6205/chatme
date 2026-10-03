@@ -80,7 +80,7 @@ export function createRuntime(deps: { config: Config; db: DB; log: Log; registry
       log,
     });
   const presence = new Presence(db, bus, log, { instanceId: config.instanceId, region: config.region, ...overrides.presence });
-  const gateway = new RealtimeGateway(db, bus, presence, log, { instanceId: config.instanceId, region: config.region, ...overrides.gateway }, registry);
+  const gateway = new RealtimeGateway(db, bus, presence, log, { instanceId: config.instanceId, region: config.region, maxConnections: config.realtimeMaxConnections, maxPerUser: config.realtimeMaxPerUser, ...overrides.gateway }, registry);
 
   let started = false;
   let workersStarted = false;

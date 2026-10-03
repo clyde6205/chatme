@@ -38,6 +38,10 @@ const envSchema = z.object({
    */
   REALTIME_DATABASE_URL: z.string().url().optional(),
 
+  /** WebSocket limits per instance; keep REALTIME_MAX_CONNECTIONS at or below fly.toml's hard_limit. */
+  REALTIME_MAX_CONNECTIONS: z.coerce.number().int().min(1).default(2_500),
+  REALTIME_MAX_PER_USER: z.coerce.number().int().min(1).max(100).default(10),
+
   /** Public base URL of the web app; links in emails point here. */
   WEB_BASE_URL: z.string().url().default('http://localhost:5173'),
   EMAIL_PROVIDER: z.enum(['resend', 'log', 'memory']).default('log'),
@@ -47,6 +51,17 @@ const envSchema = z.object({
   RESEND_API_BASE: z.string().url().default('https://api.resend.com'),
   /** Run background workers (email outbox) in this process. */
   WORKERS_ENABLED: bool.default('true'),
+
+  /** AI Gateway. `none` disables it; the ai.assistant flag gates it per user. */
+  AI_PROVIDER: z.enum(['none', 'openai']).default('none'),
+  OPENAI_API_KEY: z.string().min(10).optional(),
+  OPENAI_BASE_URL: z.string().url().default('https://api.openai.com/v1'),
+  OPENAI_ORGANIZATION: z.string().optional(),
+  /** Model id sent to the provider. Required when a provider is enabled; there is no silent default. */
+  AI_MODEL: z.string().min(1).optional(),
+  AI_DAILY_TOKEN_BUDGET: z.coerce.number().int().min(0).default(50_000),
+  AI_MAX_OUTPUT_TOKENS: z.coerce.number().int().min(16).max(16_384).default(1024),
+  AI_TIMEOUT_MS: z.coerce.number().int().min(1000).default(60_000),
 
   /** Fly.io sets these; used only for logs, metrics and presence bookkeeping. */
   FLY_REGION: z.string().optional(),
@@ -65,6 +80,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env) {
 
   // Refuse insecure production configurations at boot rather than at the first incident.
   if (c.EMAIL_PROVIDER === 'resend' && !c.RESEND_API_KEY) throw new Error('Invalid configuration: RESEND_API_KEY is required when EMAIL_PROVIDER=resend');
+  if (c.AI_PROVIDER === 'openai' && (!c.OPENAI_API_KEY || !c.AI_MODEL)) throw new Error('Invalid configuration: OPENAI_API_KEY and AI_MODEL are required when AI_PROVIDER=openai');
   if (c.DATABASE_SSL === 'verify-full' && !c.DATABASE_CA_CERT) throw new Error('Invalid configuration: DATABASE_CA_CERT is required when DATABASE_SSL=verify-full');
 
   if (c.NODE_ENV === 'production') {
@@ -99,6 +115,8 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env) {
     databaseSsl: c.DATABASE_SSL,
     databaseCaCert: c.DATABASE_CA_CERT?.replace(/\\n/g, '\n'),
     realtimeDatabaseUrl: c.REALTIME_DATABASE_URL ?? c.DATABASE_URL,
+    realtimeMaxConnections: c.REALTIME_MAX_CONNECTIONS,
+    realtimeMaxPerUser: c.REALTIME_MAX_PER_USER,
     webBaseUrl: c.WEB_BASE_URL.replace(/\/$/, ''),
     email: {
       provider: c.EMAIL_PROVIDER,
@@ -108,6 +126,16 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env) {
       resendApiBase: c.RESEND_API_BASE,
     },
     workersEnabled: c.WORKERS_ENABLED,
+    ai: {
+      provider: c.AI_PROVIDER,
+      openaiApiKey: c.OPENAI_API_KEY,
+      openaiBaseUrl: c.OPENAI_BASE_URL,
+      openaiOrganization: c.OPENAI_ORGANIZATION,
+      model: c.AI_MODEL ?? '',
+      dailyTokenBudget: c.AI_DAILY_TOKEN_BUDGET,
+      maxOutputTokens: c.AI_MAX_OUTPUT_TOKENS,
+      timeoutMs: c.AI_TIMEOUT_MS,
+    },
     region: c.FLY_REGION ?? 'local',
     instanceId: c.FLY_MACHINE_ID ?? `local-${process.pid}`,
   };

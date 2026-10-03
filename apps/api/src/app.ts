@@ -11,6 +11,10 @@ import type pg from 'pg';
 import type { Config } from './config.js';
 import type { DB } from './db/database.js';
 import { errorHandler } from './lib/errors.js';
+import { AIGateway } from './modules/ai/gateway.js';
+import { OpenAIProvider } from './modules/ai/openai.js';
+import type { AIProvider } from './modules/ai/provider.js';
+import { aiRoutes } from './modules/ai/routes.js';
 import { authRoutes } from './modules/auth/routes.js';
 import { flagRoutes } from './modules/flags/routes.js';
 import { healthRoutes } from './modules/health/routes.js';
@@ -50,6 +54,29 @@ export interface AppDeps {
   pool: pg.Pool;
   logger?: FastifyServerOptions['logger'];
   runtime?: RuntimeOverrides;
+  /** Replaces the configured AI provider (tests). */
+  aiProvider?: AIProvider;
+}
+
+const AI_SYSTEM_PROMPT =
+  'You are the CHATme assistant. Be helpful, concise and kind. Reply in the language the user writes in. ' +
+  'Never ask for passwords or verification codes.';
+
+function createAIGateway(deps: AppDeps): AIGateway | null {
+  const { config, db } = deps;
+  const provider =
+    deps.aiProvider ??
+    (config.ai.provider === 'openai'
+      ? new OpenAIProvider({ apiKey: config.ai.openaiApiKey!, baseUrl: config.ai.openaiBaseUrl, organization: config.ai.openaiOrganization })
+      : null);
+  if (!provider) return null;
+  return new AIGateway(db, provider, {
+    model: config.ai.model || 'test-model',
+    systemPrompt: AI_SYSTEM_PROMPT,
+    dailyTokenBudget: config.ai.dailyTokenBudget,
+    maxOutputTokens: config.ai.maxOutputTokens,
+    timeoutMs: config.ai.timeoutMs,
+  });
 }
 
 export async function buildApp(deps: AppDeps) {
@@ -116,6 +143,7 @@ export async function buildApp(deps: AppDeps) {
   sessionRoutes(app, { db, runtime });
   userRoutes(app, { db, runtime });
   realtimeRoutes(app, { config, gateway: runtime.gateway });
+  aiRoutes(app, { db, gateway: createAIGateway(deps) });
   flagRoutes(app, { db });
   telemetryRoutes(app, { metrics });
 
