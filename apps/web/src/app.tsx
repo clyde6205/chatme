@@ -11,12 +11,55 @@ const Home = lazy(() => import('./screens/Home'));
 const Profile = lazy(() => import('./screens/Profile'));
 const Settings = lazy(() => import('./screens/Settings'));
 const Devices = lazy(() => import('./screens/Devices'));
+const Recovery = lazy(() => import('./screens/Recovery'));
 
+/** Signed-out only: signed-in users are sent home. */
 const PUBLIC = new Set(['/signin', '/join']);
+/** Reachable either way: email links open here whether or not this browser is signed in. */
+const OPEN = new Set(['/forgot-password', '/reset-password', '/verify-email']);
+
+/** Live updates from other devices. Loaded after first render, never on the critical path. */
+function useRealtime() {
+  const { me, setMe } = useApp();
+  const { route } = useLocation();
+  const userId = me?.id;
+  useEffect(() => {
+    if (!userId) return;
+    let stopped = false;
+    let stop: (() => void) | undefined;
+    const refresh = () =>
+      api<Me>('/v1/me')
+        .then(setMe)
+        .catch(() => {});
+    const timer = setTimeout(() => {
+      void import('./lib/realtime').then(({ RealtimeClient }) => {
+        if (stopped) return;
+        const client = new RealtimeClient(userId, {
+          onEvent: (type) => {
+            if (type === 'me.updated' || type === 'email.verified') void refresh();
+          },
+          onResync: () => void refresh(),
+          onSessionEnded: () => {
+            setMe(null);
+            route('/signin', true);
+          },
+        });
+        client.start();
+        stop = () => client.stop();
+      });
+    }, 1500);
+    return () => {
+      stopped = true;
+      clearTimeout(timer);
+      stop?.();
+    };
+  }, [userId]);
+}
 
 function Guard() {
   const { me, setMe } = useApp();
   const { path, route } = useLocation();
+  useRealtime();
 
   // Render immediately from the cached identity, then revalidate in the background.
   useEffect(() => {
@@ -30,6 +73,7 @@ function Guard() {
   }, []);
 
   useEffect(() => {
+    if (OPEN.has(path)) return;
     if (!me && !PUBLIC.has(path)) route('/signin', true);
     else if (me && PUBLIC.has(path)) route('/', true);
   }, [me, path]);
@@ -42,6 +86,9 @@ function Guard() {
       <Profile path="/profile" />
       <Settings path="/settings" />
       <Devices path="/devices" />
+      <Recovery path="/forgot-password" mode="forgot" />
+      <Recovery path="/reset-password" mode="reset" />
+      <Recovery path="/verify-email" mode="verify" />
       <Home default />
     </Router>
   );

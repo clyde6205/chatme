@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { linkFromOutbox } from './mail';
 
 const unique = () => `${Date.now().toString(36)}${Math.floor(Math.random() * 1e4)}`;
 
@@ -118,4 +119,58 @@ test('first usable sign-in screen under slow 3G and 4x CPU throttling', async ({
   const ms = Date.now() - started;
   console.log(`cold load to interactive sign-in form (slow 3G, 4x CPU): ${ms} ms`);
   expect(ms).toBeLessThan(6_000);
+});
+
+test('verification link from the email confirms the address and clears the banner', async ({ page }) => {
+  const user = await register(page);
+  await expect(page.getByText(`We sent a link to ${user.email}`, { exact: false })).toBeVisible();
+  const link = await linkFromOutbox(user.email, '/verify-email');
+  await page.goto(link);
+  await expect(page.getByText('Your email is confirmed.')).toBeVisible();
+  // The token is removed from the address bar once read.
+  expect(new URL(page.url()).hash).toBe('');
+  await page.getByRole('button', { name: 'Home' }).click();
+  await expect(page.getByRole('heading', { name: `Hi, ${user.name}` })).toBeVisible();
+  await expect(page.getByText(`We sent a link to ${user.email}`, { exact: false })).toHaveCount(0);
+});
+
+test('forgotten password: request link, set a new one, sign in with it', async ({ page }) => {
+  const user = await register(page);
+  await page.getByRole('button', { name: 'Sign out' }).click();
+  await page.getByRole('link', { name: 'Forgot password?' }).click();
+  await page.getByLabel('Email').fill(user.email);
+  await page.getByRole('button', { name: 'Send link' }).click();
+  await expect(page.getByRole('status')).toContainText('If an account exists');
+  await page.goto(await linkFromOutbox(user.email, '/reset-password'));
+  await page.getByLabel('New password').fill('an even longer new passphrase');
+  await page.getByRole('button', { name: 'Set new password' }).click();
+  await expect(page.getByRole('status')).toContainText('Your password was changed');
+  await page.goto('/signin');
+  await page.getByLabel('Email').fill(user.email);
+  await page.getByLabel('Password').fill('an even longer new passphrase');
+  await page.getByRole('button', { name: 'Sign in' }).click();
+  await expect(page.getByRole('heading', { name: `Hi, ${user.name}` })).toBeVisible();
+});
+
+test('a profile change on one device appears live on another, and signing a device out ends it', async ({ page, browser }) => {
+  const user = await register(page);
+  const other = await browser.newContext({ viewport: { width: 360, height: 640 } });
+  const second = await other.newPage();
+  await second.goto('/signin');
+  await second.getByLabel('Email').fill(user.email);
+  await second.getByLabel('Password').fill(user.password);
+  await second.getByRole('button', { name: 'Sign in' }).click();
+  await expect(second.getByRole('heading', { name: `Hi, ${user.name}` })).toBeVisible();
+  // Let the realtime client (loaded after first render) connect.
+  await second.waitForTimeout(2500);
+
+  await page.goto('/profile');
+  await page.getByLabel('Display name').fill('Renamed Live');
+  await page.getByRole('button', { name: 'Save' }).click();
+  await expect(second.getByRole('heading', { name: 'Hi, Renamed Live' })).toBeVisible({ timeout: 10_000 });
+
+  await page.goto('/devices');
+  await page.getByRole('button', { name: 'Sign out all other devices' }).click();
+  await expect(second).toHaveURL(/\/signin$/, { timeout: 10_000 });
+  await other.close();
 });

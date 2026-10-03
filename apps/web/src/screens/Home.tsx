@@ -30,6 +30,7 @@ export default function Home(_props: RouteProps) {
 
   return (
     <section class="card">
+      {!me.emailVerified && <VerifyBanner email={me.email} />}
       <h1>{t.t('home.greeting', { name: me.displayName })}</h1>
       <p class="muted" dir="ltr">@{me.username}</p>
       <p>{t.t('home.intro')}</p>
@@ -41,5 +42,35 @@ export default function Home(_props: RouteProps) {
       <ErrorNote error={error} />
       <Button variant="ghost" busy={busy} onClick={() => void signOut()}>{t.t('auth.signOut')}</Button>
     </section>
+  );
+}
+
+function VerifyBanner(props: { email: string }) {
+  const { t } = useApp();
+  const [state, setState] = useState<'idle' | 'busy' | 'sent'>('idle');
+  const [error, setError] = useState<unknown>(null);
+
+  async function resend() {
+    setState('busy');
+    setError(null);
+    try {
+      await api('/v1/auth/verify-email/resend', { method: 'POST' });
+      setState('sent');
+    } catch (err) {
+      setError(err);
+      setState('idle');
+    }
+  }
+
+  return (
+    <div class="note note--info" role="status">
+      <p>{t.t('home.verifyBanner', { email: props.email })}</p>
+      {state === 'sent' ? (
+        <p>{t.t('home.resent')}</p>
+      ) : (
+        <Button variant="ghost" busy={state === 'busy'} onClick={() => void resend()}>{t.t('home.resend')}</Button>
+      )}
+      <ErrorNote error={error} />
+    </div>
   );
 }

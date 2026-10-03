@@ -37,12 +37,12 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      '/api': { target: process.env.API_PROXY_TARGET ?? 'http://localhost:8080', rewrite: (p) => p.replace(/^\/api/, '') },
+      '/api': { target: process.env.API_PROXY_TARGET ?? 'http://localhost:8080', rewrite: (p) => p.replace(/^\/api/, ''), ws: true },
     },
   },
   preview: {
     proxy: {
-      '/api': { target: process.env.API_PROXY_TARGET ?? 'http://localhost:8080', rewrite: (p) => p.replace(/^\/api/, '') },
+      '/api': { target: process.env.API_PROXY_TARGET ?? 'http://localhost:8080', rewrite: (p) => p.replace(/^\/api/, ''), ws: true },
     },
   },
   build: {

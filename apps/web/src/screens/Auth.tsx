@@ -70,6 +70,7 @@ export default function Auth(props: RouteProps & { mode: 'signin' | 'join' }) {
               minLength={join ? 10 : 1} maxLength={128} aria-describedby={hint} aria-invalid={bad.has('password')} />
           )}
         </Field>
+        {!join && <p class="small"><a href="/forgot-password">{t.t('auth.forgotPassword')}</a></p>}
         <ErrorNote error={error} />
         <Button type="submit" busy={busy}>
           {busy ? t.t('auth.working') : join ? t.t('auth.createAccount') : t.t('auth.signIn')}

@@ -51,6 +51,8 @@ input:focus-visible, select:focus-visible, textarea:focus-visible, .btn:focus-vi
 
 .note { margin: 0; padding: 10px 12px; border-radius: 10px; font-size: 15px; }
 .note--error { background: color-mix(in srgb, var(--danger) 12%, transparent); color: var(--danger); }
+.note--info { background: color-mix(in srgb, var(--brand) 10%, transparent); display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.note--info p { margin: 0; }
 .note--ok { background: color-mix(in srgb, var(--ok) 12%, transparent); color: var(--ok); }
 .switch { margin: 16px 0 0; text-align: center; color: var(--muted); }
 .switch a { color: var(--brand); font-weight: 600; }

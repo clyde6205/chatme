@@ -2,7 +2,7 @@ import type { Me, NotificationSettings, PrivacySettings } from '@chatme/contract
 import { LOCALE_MANIFEST, SUPPORTED_LOCALES, type Locale } from '@chatme/i18n';
 import { useMemo, useState } from 'preact/hooks';
 import { useLocation } from 'preact-iso';
-import { Button, ErrorNote, Field, Toggle } from '../components/ui';
+import { Button, ErrorNote, Field, invalidFields, Toggle } from '../components/ui';
 import type { RouteProps } from '../components/ui';
 import { api } from '../lib/api';
 import type { PerformanceMode } from '../lib/capabilities';
@@ -139,8 +139,52 @@ export default function Settings(_props: RouteProps) {
         )}
       </section>
 
+      <ChangePassword />
       <DeleteAccount />
     </div>
+  );
+}
+
+function ChangePassword() {
+  const { t } = useApp();
+  const [busy, setBusy] = useState(false);
+  const [done, setDone] = useState(false);
+  const [error, setError] = useState<unknown>(null);
+  const bad = invalidFields(error);
+
+  async function submit(e: Event) {
+    e.preventDefault();
+    const form = e.currentTarget as HTMLFormElement;
+    const data = new FormData(form);
+    setBusy(true);
+    setError(null);
+    setDone(false);
+    try {
+      await api('/v1/me/password', { method: 'POST', body: { currentPassword: data.get('currentPassword'), newPassword: data.get('newPassword') } });
+      form.reset();
+      setDone(true);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <section class="card">
+      <h2>{t.t('settings.security')}</h2>
+      <form onSubmit={submit}>
+        <Field id="current-password" label={t.t('settings.currentPassword')} error={bad.has('currentPassword')}>
+          {(id) => <input id={id} name="currentPassword" type="password" autoComplete="current-password" required maxLength={128} />}
+        </Field>
+        <Field id="new-password" label={t.t('auth.newPassword')} hint={t.t('auth.passwordHint', { min: 10 })} error={bad.has('newPassword')}>
+          {(id, hint) => <input id={id} name="newPassword" type="password" autoComplete="new-password" required minLength={10} maxLength={128} aria-describedby={hint} />}
+        </Field>
+        <ErrorNote error={error} />
+        {done && <p class="note note--ok" role="status">{t.t('settings.passwordChanged')}</p>}
+        <Button type="submit" busy={busy}>{t.t('settings.changePassword')}</Button>
+      </form>
+    </section>
   );
 }
 

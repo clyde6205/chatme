@@ -34,6 +34,10 @@ export default defineConfig({
         WEB_ORIGINS: `http://localhost:${WEB_PORT}`,
         LOG_LEVEL: 'warn',
         RATE_LIMIT_AUTH_PER_MIN: '1000',
+        WEB_BASE_URL: `http://localhost:${WEB_PORT}`,
+        // Emails stay in the outbox where the tests read their links (e2e/mail.ts).
+        EMAIL_PROVIDER: 'log',
+        WORKERS_ENABLED: 'false',
       },
       timeout: 60_000,
     },
