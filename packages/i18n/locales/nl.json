@@ -1,0 +1,113 @@
+{
+  "app": {
+    "name": "CHATme",
+    "tagline": "Werk. Speel. Blijf verbonden. Wereldwijd met CHATme.",
+    "loading": "Laden…",
+    "skipToContent": "Naar inhoud"
+  },
+  "nav": {
+    "home": "Start",
+    "profile": "Profiel",
+    "settings": "Instellingen",
+    "devices": "Apparaten",
+    "back": "Terug"
+  },
+  "auth": {
+    "signIn": "Inloggen",
+    "signOut": "Uitloggen",
+    "createAccount": "Account aanmaken",
+    "email": "E-mail",
+    "password": "Wachtwoord",
+    "passwordHint": "Minstens {min} tekens. Een langere zin is veiliger.",
+    "username": "Gebruikersnaam",
+    "usernameHint": "Letters, cijfers en underscores. Begint met een letter.",
+    "displayName": "Weergavenaam",
+    "haveAccount": "Heb je al een account?",
+    "noAccount": "Nieuw bij CHATme?",
+    "welcomeBack": "Welkom terug",
+    "joinTitle": "Word lid van CHATme",
+    "working": "Even geduld…"
+  },
+  "home": {
+    "greeting": "Hoi, {name}",
+    "intro": "Je account is klaar. Stel je profiel en voorkeuren in zodat CHATme werkt zoals jij wilt.",
+    "editProfile": "Profiel bewerken",
+    "openSettings": "Taal en voorkeuren",
+    "manageDevices": "Apparaten beheren"
+  },
+  "profile": {
+    "title": "Profiel",
+    "bio": "Over jou",
+    "bioHint": "Maximaal {max} tekens.",
+    "save": "Opslaan",
+    "saved": "Opgeslagen",
+    "memberSince": "Lid sinds {date}"
+  },
+  "settings": {
+    "title": "Instellingen",
+    "language": "Taal",
+    "languageHint": "Vertalingen die als concept zijn gemarkeerd, worden nog nagekeken.",
+    "draftLabel": "concept",
+    "timezone": "Tijdzone",
+    "performance": "Prestatiemodus",
+    "performanceHint": "Automatisch kiest de beste modus voor dit apparaat en deze verbinding.",
+    "performanceAuto": "Automatisch",
+    "performanceLow": "Licht",
+    "performanceNormal": "Standaard",
+    "performanceHigh": "Uitgebreid",
+    "detected": "Gedetecteerd: {mode}",
+    "privacy": "Privacy",
+    "profileVisibility": "Wie mijn profiel kan zien",
+    "whoCanMessage": "Wie mij berichten kan sturen",
+    "whoCanAddToGroups": "Wie mij aan groepen kan toevoegen",
+    "levelEveryone": "Iedereen",
+    "levelContacts": "Mijn contacten",
+    "levelNobody": "Niemand",
+    "showPresence": "Laten zien wanneer ik online ben",
+    "sendReadReceipts": "Leesbevestigingen versturen",
+    "discoverable": "Vindbaar zijn via mijn gebruikersnaam",
+    "notifications": "Meldingen",
+    "notifyMessages": "Berichten",
+    "notifyMentions": "Vermeldingen",
+    "notifyCalls": "Oproepen",
+    "notifyGroupActivity": "Groepsactiviteit",
+    "notifyCommunityActivity": "Community-activiteit",
+    "quietHours": "Stille uren",
+    "quietFrom": "Van",
+    "quietTo": "Tot",
+    "account": "Account",
+    "deleteAccount": "Account verwijderen",
+    "deleteWarning": "Hiermee wordt je account definitief verwijderd en word je op alle apparaten uitgelogd. Dit kan niet ongedaan worden gemaakt.",
+    "confirmPassword": "Voer je wachtwoord in om te bevestigen",
+    "deleteConfirm": "Mijn account verwijderen"
+  },
+  "devices": {
+    "title": "Apparaten",
+    "count": "{count, plural, one {# actief apparaat} other {# actieve apparaten}}",
+    "thisDevice": "Dit apparaat",
+    "lastActive": "Laatst actief {time}",
+    "signedIn": "Ingelogd op {date}",
+    "signOutDevice": "Uitloggen",
+    "signOutOthers": "Uitloggen op alle andere apparaten",
+    "signedOutOthers": "{count, plural, =0 {Er waren geen andere apparaten ingelogd.} one {# apparaat uitgelogd.} other {# apparaten uitgelogd.}}",
+    "unknownDevice": "Onbekend apparaat"
+  },
+  "network": {
+    "offline": "Je bent offline. Je kunt blijven lezen; wijzigingen worden gesynchroniseerd zodra je weer verbinding hebt.",
+    "online": "Weer online"
+  },
+  "errors": {
+    "validation_failed": "Controleer de gemarkeerde velden.",
+    "unauthenticated": "Log opnieuw in.",
+    "forbidden": "Je hebt geen toestemming om dat te doen.",
+    "not_found": "We konden dat niet vinden.",
+    "conflict_email": "Er bestaat al een account met dit e-mailadres.",
+    "conflict_username": "Die gebruikersnaam is al in gebruik.",
+    "invalid_credentials": "E-mail of wachtwoord is onjuist.",
+    "rate_limited": "Te veel pogingen. Wacht even en probeer het opnieuw.",
+    "csrf_failed": "Je sessie kon niet worden geverifieerd. Laad de pagina opnieuw.",
+    "service_unavailable": "CHATme is tijdelijk niet beschikbaar. Probeer het zo opnieuw.",
+    "internal": "Er ging iets mis aan onze kant.",
+    "network": "CHATme is niet bereikbaar. Controleer je verbinding."
+  }
+}

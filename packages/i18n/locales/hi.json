@@ -1,0 +1,113 @@
+{
+  "app": {
+    "name": "CHATme",
+    "tagline": "काम करें। खेलें। जुड़े रहें। CHATme के साथ दुनिया भर में।",
+    "loading": "लोड हो रहा है…",
+    "skipToContent": "सामग्री पर जाएँ"
+  },
+  "nav": {
+    "home": "होम",
+    "profile": "प्रोफ़ाइल",
+    "settings": "सेटिंग्स",
+    "devices": "डिवाइस",
+    "back": "वापस"
+  },
+  "auth": {
+    "signIn": "साइन इन करें",
+    "signOut": "साइन आउट करें",
+    "createAccount": "खाता बनाएँ",
+    "email": "ईमेल",
+    "password": "पासवर्ड",
+    "passwordHint": "कम से कम {min} अक्षर। लंबा वाक्यांश ज़्यादा सुरक्षित होता है।",
+    "username": "उपयोगकर्ता नाम",
+    "usernameHint": "अंग्रेज़ी अक्षर, अंक और अंडरस्कोर। अक्षर से शुरू होना चाहिए।",
+    "displayName": "प्रदर्शित नाम",
+    "haveAccount": "क्या आपका पहले से खाता है?",
+    "noAccount": "CHATme पर नए हैं?",
+    "welcomeBack": "फिर से स्वागत है",
+    "joinTitle": "CHATme से जुड़ें",
+    "working": "कृपया प्रतीक्षा करें…"
+  },
+  "home": {
+    "greeting": "नमस्ते, {name}",
+    "intro": "आपका खाता तैयार है। अपनी प्रोफ़ाइल और पसंद सेट करें ताकि CHATme आपके हिसाब से काम करे।",
+    "editProfile": "प्रोफ़ाइल संपादित करें",
+    "openSettings": "भाषा और पसंद",
+    "manageDevices": "डिवाइस प्रबंधित करें"
+  },
+  "profile": {
+    "title": "प्रोफ़ाइल",
+    "bio": "आपके बारे में",
+    "bioHint": "अधिकतम {max} अक्षर।",
+    "save": "सहेजें",
+    "saved": "सहेजा गया",
+    "memberSince": "{date} से सदस्य"
+  },
+  "settings": {
+    "title": "सेटिंग्स",
+    "language": "भाषा",
+    "languageHint": "ड्राफ़्ट के रूप में चिह्नित अनुवादों की अभी समीक्षा हो रही है।",
+    "draftLabel": "ड्राफ़्ट",
+    "timezone": "समय क्षेत्र",
+    "performance": "परफ़ॉर्मेंस मोड",
+    "performanceHint": "ऑटो इस डिवाइस और कनेक्शन के लिए सबसे अच्छा मोड चुनता है।",
+    "performanceAuto": "ऑटो",
+    "performanceLow": "हल्का",
+    "performanceNormal": "सामान्य",
+    "performanceHigh": "समृद्ध",
+    "detected": "पहचाना गया: {mode}",
+    "privacy": "गोपनीयता",
+    "profileVisibility": "मेरी प्रोफ़ाइल कौन देख सकता है",
+    "whoCanMessage": "मुझे कौन संदेश भेज सकता है",
+    "whoCanAddToGroups": "मुझे समूहों में कौन जोड़ सकता है",
+    "levelEveryone": "सभी",
+    "levelContacts": "मेरे संपर्क",
+    "levelNobody": "कोई नहीं",
+    "showPresence": "ऑनलाइन होने पर दिखाएँ",
+    "sendReadReceipts": "पढ़ने की रसीद भेजें",
+    "discoverable": "लोग मुझे उपयोगकर्ता नाम से ढूँढ सकें",
+    "notifications": "सूचनाएँ",
+    "notifyMessages": "संदेश",
+    "notifyMentions": "उल्लेख",
+    "notifyCalls": "कॉल",
+    "notifyGroupActivity": "समूह गतिविधि",
+    "notifyCommunityActivity": "समुदाय गतिविधि",
+    "quietHours": "शांत समय",
+    "quietFrom": "से",
+    "quietTo": "तक",
+    "account": "खाता",
+    "deleteAccount": "खाता हटाएँ",
+    "deleteWarning": "इससे आपका खाता स्थायी रूप से हट जाएगा और सभी डिवाइस से साइन आउट हो जाएगा। इसे पूर्ववत नहीं किया जा सकता।",
+    "confirmPassword": "पुष्टि के लिए अपना पासवर्ड डालें",
+    "deleteConfirm": "मेरा खाता हटाएँ"
+  },
+  "devices": {
+    "title": "डिवाइस",
+    "count": "{count, plural, one {# सक्रिय डिवाइस} other {# सक्रिय डिवाइस}}",
+    "thisDevice": "यह डिवाइस",
+    "lastActive": "अंतिम बार सक्रिय {time}",
+    "signedIn": "{date} को साइन इन किया",
+    "signOutDevice": "साइन आउट करें",
+    "signOutOthers": "बाकी सभी डिवाइस से साइन आउट करें",
+    "signedOutOthers": "{count, plural, =0 {कोई अन्य डिवाइस साइन इन नहीं था।} one {# डिवाइस से साइन आउट किया गया।} other {# डिवाइस से साइन आउट किया गया।}}",
+    "unknownDevice": "अज्ञात डिवाइस"
+  },
+  "network": {
+    "offline": "आप ऑफ़लाइन हैं। आप पढ़ना जारी रख सकते हैं; दोबारा कनेक्ट होने पर बदलाव सिंक हो जाएँगे।",
+    "online": "फिर से ऑनलाइन"
+  },
+  "errors": {
+    "validation_failed": "कृपया चिह्नित फ़ील्ड जाँचें।",
+    "unauthenticated": "कृपया फिर से साइन इन करें।",
+    "forbidden": "आपको ऐसा करने की अनुमति नहीं है।",
+    "not_found": "हमें यह नहीं मिला।",
+    "conflict_email": "इस ईमेल से पहले से एक खाता मौजूद है।",
+    "conflict_username": "यह उपयोगकर्ता नाम पहले से लिया जा चुका है।",
+    "invalid_credentials": "ईमेल या पासवर्ड गलत है।",
+    "rate_limited": "बहुत ज़्यादा प्रयास। कृपया थोड़ी देर रुककर फिर कोशिश करें।",
+    "csrf_failed": "आपके सत्र की पुष्टि नहीं हो सकी। कृपया पेज फिर से लोड करें।",
+    "service_unavailable": "CHATme अभी अस्थायी रूप से उपलब्ध नहीं है। कृपया थोड़ी देर बाद कोशिश करें।",
+    "internal": "हमारी ओर से कुछ गड़बड़ हो गई।",
+    "network": "CHATme तक नहीं पहुँच पा रहे। अपना कनेक्शन जाँचें।"
+  }
+}

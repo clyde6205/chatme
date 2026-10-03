@@ -1,0 +1,113 @@
+{
+  "app": {
+    "name": "CHATme",
+    "tagline": "ทำงาน เล่น เชื่อมต่อกันตลอด ทั่วโลกกับ CHATme",
+    "loading": "กำลังโหลด…",
+    "skipToContent": "ข้ามไปยังเนื้อหา"
+  },
+  "nav": {
+    "home": "หน้าแรก",
+    "profile": "โปรไฟล์",
+    "settings": "การตั้งค่า",
+    "devices": "อุปกรณ์",
+    "back": "ย้อนกลับ"
+  },
+  "auth": {
+    "signIn": "เข้าสู่ระบบ",
+    "signOut": "ออกจากระบบ",
+    "createAccount": "สร้างบัญชี",
+    "email": "อีเมล",
+    "password": "รหัสผ่าน",
+    "passwordHint": "อย่างน้อย {min} ตัวอักษร วลีที่ยาวกว่าจะปลอดภัยกว่า",
+    "username": "ชื่อผู้ใช้",
+    "usernameHint": "ตัวอักษรภาษาอังกฤษ ตัวเลข และขีดล่าง ขึ้นต้นด้วยตัวอักษร",
+    "displayName": "ชื่อที่แสดง",
+    "haveAccount": "มีบัญชีอยู่แล้ว?",
+    "noAccount": "เพิ่งเริ่มใช้ CHATme?",
+    "welcomeBack": "ยินดีต้อนรับกลับ",
+    "joinTitle": "เข้าร่วม CHATme",
+    "working": "โปรดรอสักครู่…"
+  },
+  "home": {
+    "greeting": "สวัสดี {name}",
+    "intro": "บัญชีของคุณพร้อมแล้ว ตั้งค่าโปรไฟล์และการตั้งค่าเพื่อให้ CHATme ทำงานในแบบที่คุณต้องการ",
+    "editProfile": "แก้ไขโปรไฟล์",
+    "openSettings": "ภาษาและการตั้งค่า",
+    "manageDevices": "จัดการอุปกรณ์"
+  },
+  "profile": {
+    "title": "โปรไฟล์",
+    "bio": "เกี่ยวกับคุณ",
+    "bioHint": "ไม่เกิน {max} ตัวอักษร",
+    "save": "บันทึก",
+    "saved": "บันทึกแล้ว",
+    "memberSince": "เป็นสมาชิกตั้งแต่ {date}"
+  },
+  "settings": {
+    "title": "การตั้งค่า",
+    "language": "ภาษา",
+    "languageHint": "คำแปลที่ทำเครื่องหมายว่าฉบับร่างยังอยู่ระหว่างการตรวจทาน",
+    "draftLabel": "ฉบับร่าง",
+    "timezone": "เขตเวลา",
+    "performance": "โหมดประสิทธิภาพ",
+    "performanceHint": "อัตโนมัติจะเลือกโหมดที่ดีที่สุดสำหรับอุปกรณ์และการเชื่อมต่อนี้",
+    "performanceAuto": "อัตโนมัติ",
+    "performanceLow": "เบา",
+    "performanceNormal": "มาตรฐาน",
+    "performanceHigh": "เต็มรูปแบบ",
+    "detected": "ตรวจพบ: {mode}",
+    "privacy": "ความเป็นส่วนตัว",
+    "profileVisibility": "ใครดูโปรไฟล์ของฉันได้",
+    "whoCanMessage": "ใครส่งข้อความถึงฉันได้",
+    "whoCanAddToGroups": "ใครเพิ่มฉันเข้ากลุ่มได้",
+    "levelEveryone": "ทุกคน",
+    "levelContacts": "รายชื่อติดต่อของฉัน",
+    "levelNobody": "ไม่มีใคร",
+    "showPresence": "แสดงเมื่อฉันออนไลน์",
+    "sendReadReceipts": "ส่งการแจ้งเตือนว่าอ่านแล้ว",
+    "discoverable": "ให้ผู้อื่นค้นหาฉันด้วยชื่อผู้ใช้",
+    "notifications": "การแจ้งเตือน",
+    "notifyMessages": "ข้อความ",
+    "notifyMentions": "การกล่าวถึง",
+    "notifyCalls": "การโทร",
+    "notifyGroupActivity": "กิจกรรมกลุ่ม",
+    "notifyCommunityActivity": "กิจกรรมชุมชน",
+    "quietHours": "ช่วงเวลาเงียบ",
+    "quietFrom": "ตั้งแต่",
+    "quietTo": "ถึง",
+    "account": "บัญชี",
+    "deleteAccount": "ลบบัญชี",
+    "deleteWarning": "การดำเนินการนี้จะลบบัญชีของคุณอย่างถาวรและออกจากระบบในทุกอุปกรณ์ ไม่สามารถย้อนกลับได้",
+    "confirmPassword": "ป้อนรหัสผ่านเพื่อยืนยัน",
+    "deleteConfirm": "ลบบัญชีของฉัน"
+  },
+  "devices": {
+    "title": "อุปกรณ์",
+    "count": "{count, plural, other {อุปกรณ์ที่ใช้งานอยู่ # เครื่อง}}",
+    "thisDevice": "อุปกรณ์นี้",
+    "lastActive": "ใช้งานล่าสุด {time}",
+    "signedIn": "เข้าสู่ระบบเมื่อ {date}",
+    "signOutDevice": "ออกจากระบบ",
+    "signOutOthers": "ออกจากระบบในอุปกรณ์อื่นทั้งหมด",
+    "signedOutOthers": "{count, plural, =0 {ไม่มีอุปกรณ์อื่นที่เข้าสู่ระบบอยู่} other {ออกจากระบบแล้ว # เครื่อง}}",
+    "unknownDevice": "อุปกรณ์ที่ไม่รู้จัก"
+  },
+  "network": {
+    "offline": "คุณออฟไลน์อยู่ ยังอ่านต่อได้ และการเปลี่ยนแปลงจะซิงค์เมื่อเชื่อมต่ออีกครั้ง",
+    "online": "กลับมาออนไลน์แล้ว"
+  },
+  "errors": {
+    "validation_failed": "โปรดตรวจสอบช่องที่ไฮไลต์ไว้",
+    "unauthenticated": "โปรดเข้าสู่ระบบอีกครั้ง",
+    "forbidden": "คุณไม่มีสิทธิ์ทำสิ่งนี้",
+    "not_found": "ไม่พบสิ่งที่ต้องการ",
+    "conflict_email": "มีบัญชีที่ใช้อีเมลนี้อยู่แล้ว",
+    "conflict_username": "ชื่อผู้ใช้นี้ถูกใช้แล้ว",
+    "invalid_credentials": "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
+    "rate_limited": "พยายามหลายครั้งเกินไป โปรดรอสักครู่แล้วลองอีกครั้ง",
+    "csrf_failed": "ไม่สามารถยืนยันเซสชันของคุณได้ โปรดโหลดหน้าใหม่",
+    "service_unavailable": "CHATme ไม่พร้อมใช้งานชั่วคราว โปรดลองอีกครั้งในอีกสักครู่",
+    "internal": "เกิดข้อผิดพลาดจากฝั่งของเรา",
+    "network": "ไม่สามารถเชื่อมต่อกับ CHATme ได้ โปรดตรวจสอบการเชื่อมต่อ"
+  }
+}

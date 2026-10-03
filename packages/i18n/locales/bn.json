@@ -1,0 +1,113 @@
+{
+  "app": {
+    "name": "CHATme",
+    "tagline": "কাজ করুন। খেলুন। যুক্ত থাকুন। CHATme-এর সাথে বিশ্বজুড়ে।",
+    "loading": "লোড হচ্ছে…",
+    "skipToContent": "বিষয়বস্তুতে যান"
+  },
+  "nav": {
+    "home": "হোম",
+    "profile": "প্রোফাইল",
+    "settings": "সেটিংস",
+    "devices": "ডিভাইস",
+    "back": "ফিরে যান"
+  },
+  "auth": {
+    "signIn": "সাইন ইন করুন",
+    "signOut": "সাইন আউট করুন",
+    "createAccount": "অ্যাকাউন্ট তৈরি করুন",
+    "email": "ইমেল",
+    "password": "পাসওয়ার্ড",
+    "passwordHint": "কমপক্ষে {min}টি অক্ষর। লম্বা বাক্যাংশ বেশি নিরাপদ।",
+    "username": "ব্যবহারকারীর নাম",
+    "usernameHint": "ইংরেজি অক্ষর, সংখ্যা ও আন্ডারস্কোর। অক্ষর দিয়ে শুরু হবে।",
+    "displayName": "প্রদর্শিত নাম",
+    "haveAccount": "ইতিমধ্যে অ্যাকাউন্ট আছে?",
+    "noAccount": "CHATme-এ নতুন?",
+    "welcomeBack": "আবার স্বাগতম",
+    "joinTitle": "CHATme-এ যোগ দিন",
+    "working": "অনুগ্রহ করে অপেক্ষা করুন…"
+  },
+  "home": {
+    "greeting": "হাই, {name}",
+    "intro": "আপনার অ্যাকাউন্ট প্রস্তুত। আপনার প্রোফাইল ও পছন্দ সেট করুন যাতে CHATme আপনার মতো করে কাজ করে।",
+    "editProfile": "প্রোফাইল সম্পাদনা করুন",
+    "openSettings": "ভাষা ও পছন্দ",
+    "manageDevices": "ডিভাইস পরিচালনা করুন"
+  },
+  "profile": {
+    "title": "প্রোফাইল",
+    "bio": "আপনার সম্পর্কে",
+    "bioHint": "সর্বোচ্চ {max}টি অক্ষর।",
+    "save": "সংরক্ষণ করুন",
+    "saved": "সংরক্ষিত",
+    "memberSince": "{date} থেকে সদস্য"
+  },
+  "settings": {
+    "title": "সেটিংস",
+    "language": "ভাষা",
+    "languageHint": "খসড়া হিসেবে চিহ্নিত অনুবাদগুলো এখনও পর্যালোচনা করা হচ্ছে।",
+    "draftLabel": "খসড়া",
+    "timezone": "সময় অঞ্চল",
+    "performance": "পারফরম্যান্স মোড",
+    "performanceHint": "অটো এই ডিভাইস ও সংযোগের জন্য সেরা মোড বেছে নেয়।",
+    "performanceAuto": "অটো",
+    "performanceLow": "হালকা",
+    "performanceNormal": "সাধারণ",
+    "performanceHigh": "সমৃদ্ধ",
+    "detected": "শনাক্ত হয়েছে: {mode}",
+    "privacy": "গোপনীয়তা",
+    "profileVisibility": "কে আমার প্রোফাইল দেখতে পারবে",
+    "whoCanMessage": "কে আমাকে মেসেজ পাঠাতে পারবে",
+    "whoCanAddToGroups": "কে আমাকে গ্রুপে যোগ করতে পারবে",
+    "levelEveryone": "সবাই",
+    "levelContacts": "আমার পরিচিতরা",
+    "levelNobody": "কেউ না",
+    "showPresence": "আমি অনলাইনে থাকলে দেখাও",
+    "sendReadReceipts": "পড়ার রসিদ পাঠাও",
+    "discoverable": "ব্যবহারকারীর নাম দিয়ে আমাকে খুঁজে পেতে দাও",
+    "notifications": "বিজ্ঞপ্তি",
+    "notifyMessages": "মেসেজ",
+    "notifyMentions": "উল্লেখ",
+    "notifyCalls": "কল",
+    "notifyGroupActivity": "গ্রুপের কার্যকলাপ",
+    "notifyCommunityActivity": "কমিউনিটির কার্যকলাপ",
+    "quietHours": "নীরব সময়",
+    "quietFrom": "থেকে",
+    "quietTo": "পর্যন্ত",
+    "account": "অ্যাকাউন্ট",
+    "deleteAccount": "অ্যাকাউন্ট মুছুন",
+    "deleteWarning": "এটি আপনার অ্যাকাউন্ট স্থায়ীভাবে মুছে দেবে এবং সব ডিভাইস থেকে সাইন আউট করবে। এটি ফেরানো যাবে না।",
+    "confirmPassword": "নিশ্চিত করতে আপনার পাসওয়ার্ড দিন",
+    "deleteConfirm": "আমার অ্যাকাউন্ট মুছুন"
+  },
+  "devices": {
+    "title": "ডিভাইস",
+    "count": "{count, plural, one {#টি সক্রিয় ডিভাইস} other {#টি সক্রিয় ডিভাইস}}",
+    "thisDevice": "এই ডিভাইস",
+    "lastActive": "সর্বশেষ সক্রিয় {time}",
+    "signedIn": "{date} তারিখে সাইন ইন",
+    "signOutDevice": "সাইন আউট করুন",
+    "signOutOthers": "অন্য সব ডিভাইস থেকে সাইন আউট করুন",
+    "signedOutOthers": "{count, plural, =0 {অন্য কোনো ডিভাইসে সাইন ইন ছিল না।} one {#টি ডিভাইস থেকে সাইন আউট করা হয়েছে।} other {#টি ডিভাইস থেকে সাইন আউট করা হয়েছে।}}",
+    "unknownDevice": "অজানা ডিভাইস"
+  },
+  "network": {
+    "offline": "আপনি অফলাইনে আছেন। পড়া চালিয়ে যেতে পারেন; আবার সংযুক্ত হলে পরিবর্তনগুলো সিঙ্ক হবে।",
+    "online": "আবার অনলাইনে"
+  },
+  "errors": {
+    "validation_failed": "অনুগ্রহ করে চিহ্নিত ঘরগুলো দেখুন।",
+    "unauthenticated": "অনুগ্রহ করে আবার সাইন ইন করুন।",
+    "forbidden": "এটি করার অনুমতি আপনার নেই।",
+    "not_found": "আমরা এটি খুঁজে পাইনি।",
+    "conflict_email": "এই ইমেল দিয়ে ইতিমধ্যে একটি অ্যাকাউন্ট আছে।",
+    "conflict_username": "এই ব্যবহারকারীর নামটি ইতিমধ্যে নেওয়া হয়েছে।",
+    "invalid_credentials": "ইমেল বা পাসওয়ার্ড ভুল।",
+    "rate_limited": "অনেকবার চেষ্টা করা হয়েছে। একটু অপেক্ষা করে আবার চেষ্টা করুন।",
+    "csrf_failed": "আপনার সেশন যাচাই করা যায়নি। অনুগ্রহ করে পেজটি আবার লোড করুন।",
+    "service_unavailable": "CHATme সাময়িকভাবে অনুপলব্ধ। একটু পরে আবার চেষ্টা করুন।",
+    "internal": "আমাদের দিক থেকে কিছু সমস্যা হয়েছে।",
+    "network": "CHATme-এ পৌঁছানো যাচ্ছে না। আপনার সংযোগ পরীক্ষা করুন।"
+  }
+}

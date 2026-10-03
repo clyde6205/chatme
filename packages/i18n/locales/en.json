@@ -1,0 +1,113 @@
+{
+  "app": {
+    "name": "CHATme",
+    "tagline": "Work. Play. Stay Connected. Global with CHATme.",
+    "loading": "Loading…",
+    "skipToContent": "Skip to content"
+  },
+  "nav": {
+    "home": "Home",
+    "profile": "Profile",
+    "settings": "Settings",
+    "devices": "Devices",
+    "back": "Back"
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "createAccount": "Create account",
+    "email": "Email",
+    "password": "Password",
+    "passwordHint": "At least {min} characters. A longer phrase is stronger.",
+    "username": "Username",
+    "usernameHint": "Letters, numbers and underscores. Starts with a letter.",
+    "displayName": "Display name",
+    "haveAccount": "Already have an account?",
+    "noAccount": "New to CHATme?",
+    "welcomeBack": "Welcome back",
+    "joinTitle": "Join CHATme",
+    "working": "Please wait…"
+  },
+  "home": {
+    "greeting": "Hi, {name}",
+    "intro": "Your account is ready. Set up your profile and preferences so CHATme works the way you like.",
+    "editProfile": "Edit profile",
+    "openSettings": "Language and preferences",
+    "manageDevices": "Manage devices"
+  },
+  "profile": {
+    "title": "Profile",
+    "bio": "About you",
+    "bioHint": "Up to {max} characters.",
+    "save": "Save",
+    "saved": "Saved",
+    "memberSince": "Member since {date}"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "languageHint": "Translations marked as draft are still being reviewed.",
+    "draftLabel": "draft",
+    "timezone": "Time zone",
+    "performance": "Performance mode",
+    "performanceHint": "Auto picks the best mode for this device and connection.",
+    "performanceAuto": "Auto",
+    "performanceLow": "Light",
+    "performanceNormal": "Standard",
+    "performanceHigh": "Rich",
+    "detected": "Detected: {mode}",
+    "privacy": "Privacy",
+    "profileVisibility": "Who can see my profile",
+    "whoCanMessage": "Who can message me",
+    "whoCanAddToGroups": "Who can add me to groups",
+    "levelEveryone": "Everyone",
+    "levelContacts": "My contacts",
+    "levelNobody": "Nobody",
+    "showPresence": "Show when I'm online",
+    "sendReadReceipts": "Send read receipts",
+    "discoverable": "Let people find me by username",
+    "notifications": "Notifications",
+    "notifyMessages": "Messages",
+    "notifyMentions": "Mentions",
+    "notifyCalls": "Calls",
+    "notifyGroupActivity": "Group activity",
+    "notifyCommunityActivity": "Community activity",
+    "quietHours": "Quiet hours",
+    "quietFrom": "From",
+    "quietTo": "To",
+    "account": "Account",
+    "deleteAccount": "Delete account",
+    "deleteWarning": "This permanently deletes your account and signs out every device. It cannot be undone.",
+    "confirmPassword": "Enter your password to confirm",
+    "deleteConfirm": "Delete my account"
+  },
+  "devices": {
+    "title": "Devices",
+    "count": "{count, plural, one {# active device} other {# active devices}}",
+    "thisDevice": "This device",
+    "lastActive": "Last active {time}",
+    "signedIn": "Signed in {date}",
+    "signOutDevice": "Sign out",
+    "signOutOthers": "Sign out all other devices",
+    "signedOutOthers": "{count, plural, =0 {No other devices were signed in.} one {Signed out # device.} other {Signed out # devices.}}",
+    "unknownDevice": "Unknown device"
+  },
+  "network": {
+    "offline": "You're offline. You can keep reading; changes will sync when you reconnect.",
+    "online": "Back online"
+  },
+  "errors": {
+    "validation_failed": "Please check the highlighted fields.",
+    "unauthenticated": "Please sign in again.",
+    "forbidden": "You don't have permission to do that.",
+    "not_found": "We couldn't find that.",
+    "conflict_email": "An account with this email already exists.",
+    "conflict_username": "That username is taken.",
+    "invalid_credentials": "Email or password is incorrect.",
+    "rate_limited": "Too many attempts. Please wait a moment and try again.",
+    "csrf_failed": "Your session could not be verified. Please reload the page.",
+    "service_unavailable": "CHATme is temporarily unavailable. Please try again shortly.",
+    "internal": "Something went wrong on our side.",
+    "network": "Can't reach CHATme. Check your connection."
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "app": {
+    "name": "CHATme",
+    "tagline": "Làm việc. Vui chơi. Luôn kết nối. Toàn cầu cùng CHATme.",
+    "loading": "Đang tải…",
+    "skipToContent": "Chuyển đến nội dung"
+  },
+  "nav": {
+    "home": "Trang chủ",
+    "profile": "Hồ sơ",
+    "settings": "Cài đặt",
+    "devices": "Thiết bị",
+    "back": "Quay lại"
+  },
+  "auth": {
+    "signIn": "Đăng nhập",
+    "signOut": "Đăng xuất",
+    "createAccount": "Tạo tài khoản",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "passwordHint": "Ít nhất {min} ký tự. Cụm từ dài hơn sẽ an toàn hơn.",
+    "username": "Tên người dùng",
+    "usernameHint": "Chữ cái, số và dấu gạch dưới. Bắt đầu bằng chữ cái.",
+    "displayName": "Tên hiển thị",
+    "haveAccount": "Đã có tài khoản?",
+    "noAccount": "Mới dùng CHATme?",
+    "welcomeBack": "Chào mừng bạn quay lại",
+    "joinTitle": "Tham gia CHATme",
+    "working": "Vui lòng chờ…"
+  },
+  "home": {
+    "greeting": "Xin chào, {name}",
+    "intro": "Tài khoản của bạn đã sẵn sàng. Hãy thiết lập hồ sơ và tùy chọn để CHATme hoạt động theo cách bạn muốn.",
+    "editProfile": "Chỉnh sửa hồ sơ",
+    "openSettings": "Ngôn ngữ và tùy chọn",
+    "manageDevices": "Quản lý thiết bị"
+  },
+  "profile": {
+    "title": "Hồ sơ",
+    "bio": "Giới thiệu",
+    "bioHint": "Tối đa {max} ký tự.",
+    "save": "Lưu",
+    "saved": "Đã lưu",
+    "memberSince": "Thành viên từ {date}"
+  },
+  "settings": {
+    "title": "Cài đặt",
+    "language": "Ngôn ngữ",
+    "languageHint": "Các bản dịch được đánh dấu là bản nháp vẫn đang được xem xét.",
+    "draftLabel": "bản nháp",
+    "timezone": "Múi giờ",
+    "performance": "Chế độ hiệu năng",
+    "performanceHint": "Tự động sẽ chọn chế độ tốt nhất cho thiết bị và kết nối này.",
+    "performanceAuto": "Tự động",
+    "performanceLow": "Nhẹ",
+    "performanceNormal": "Tiêu chuẩn",
+    "performanceHigh": "Đầy đủ",
+    "detected": "Phát hiện: {mode}",
+    "privacy": "Quyền riêng tư",
+    "profileVisibility": "Ai có thể xem hồ sơ của tôi",
+    "whoCanMessage": "Ai có thể nhắn tin cho tôi",
+    "whoCanAddToGroups": "Ai có thể thêm tôi vào nhóm",
+    "levelEveryone": "Mọi người",
+    "levelContacts": "Danh bạ của tôi",
+    "levelNobody": "Không ai",
+    "showPresence": "Hiển thị khi tôi trực tuyến",
+    "sendReadReceipts": "Gửi thông báo đã đọc",
+    "discoverable": "Cho phép tìm tôi bằng tên người dùng",
+    "notifications": "Thông báo",
+    "notifyMessages": "Tin nhắn",
+    "notifyMentions": "Lượt nhắc đến",
+    "notifyCalls": "Cuộc gọi",
+    "notifyGroupActivity": "Hoạt động nhóm",
+    "notifyCommunityActivity": "Hoạt động cộng đồng",
+    "quietHours": "Giờ yên tĩnh",
+    "quietFrom": "Từ",
+    "quietTo": "Đến",
+    "account": "Tài khoản",
+    "deleteAccount": "Xóa tài khoản",
+    "deleteWarning": "Thao tác này xóa vĩnh viễn tài khoản của bạn và đăng xuất khỏi mọi thiết bị. Không thể hoàn tác.",
+    "confirmPassword": "Nhập mật khẩu để xác nhận",
+    "deleteConfirm": "Xóa tài khoản của tôi"
+  },
+  "devices": {
+    "title": "Thiết bị",
+    "count": "{count, plural, other {# thiết bị đang hoạt động}}",
+    "thisDevice": "Thiết bị này",
+    "lastActive": "Hoạt động lần cuối {time}",
+    "signedIn": "Đăng nhập lúc {date}",
+    "signOutDevice": "Đăng xuất",
+    "signOutOthers": "Đăng xuất khỏi tất cả thiết bị khác",
+    "signedOutOthers": "{count, plural, =0 {Không có thiết bị nào khác đang đăng nhập.} other {Đã đăng xuất # thiết bị.}}",
+    "unknownDevice": "Thiết bị không xác định"
+  },
+  "network": {
+    "offline": "Bạn đang ngoại tuyến. Bạn vẫn có thể đọc; các thay đổi sẽ được đồng bộ khi có kết nối lại.",
+    "online": "Đã trực tuyến trở lại"
+  },
+  "errors": {
+    "validation_failed": "Vui lòng kiểm tra các trường được đánh dấu.",
+    "unauthenticated": "Vui lòng đăng nhập lại.",
+    "forbidden": "Bạn không có quyền thực hiện thao tác này.",
+    "not_found": "Chúng tôi không tìm thấy nội dung đó.",
+    "conflict_email": "Đã có tài khoản dùng email này.",
+    "conflict_username": "Tên người dùng này đã được sử dụng.",
+    "invalid_credentials": "Email hoặc mật khẩu không đúng.",
+    "rate_limited": "Quá nhiều lần thử. Vui lòng đợi một chút rồi thử lại.",
+    "csrf_failed": "Không thể xác minh phiên của bạn. Vui lòng tải lại trang.",
+    "service_unavailable": "CHATme tạm thời không khả dụng. Vui lòng thử lại sau ít phút.",
+    "internal": "Đã xảy ra lỗi từ phía chúng tôi.",
+    "network": "Không thể kết nối tới CHATme. Hãy kiểm tra kết nối của bạn."
+  }
+}

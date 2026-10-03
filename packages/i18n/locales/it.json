@@ -1,0 +1,113 @@
+{
+  "app": {
+    "name": "CHATme",
+    "tagline": "Lavora. Gioca. Resta connesso. Globale con CHATme.",
+    "loading": "Caricamento…",
+    "skipToContent": "Vai al contenuto"
+  },
+  "nav": {
+    "home": "Home",
+    "profile": "Profilo",
+    "settings": "Impostazioni",
+    "devices": "Dispositivi",
+    "back": "Indietro"
+  },
+  "auth": {
+    "signIn": "Accedi",
+    "signOut": "Esci",
+    "createAccount": "Crea account",
+    "email": "Email",
+    "password": "Password",
+    "passwordHint": "Almeno {min} caratteri. Una frase più lunga è più sicura.",
+    "username": "Nome utente",
+    "usernameHint": "Lettere, numeri e trattini bassi. Inizia con una lettera.",
+    "displayName": "Nome visualizzato",
+    "haveAccount": "Hai già un account?",
+    "noAccount": "Nuovo su CHATme?",
+    "welcomeBack": "Bentornato",
+    "joinTitle": "Unisciti a CHATme",
+    "working": "Attendere…"
+  },
+  "home": {
+    "greeting": "Ciao, {name}",
+    "intro": "Il tuo account è pronto. Configura il profilo e le preferenze perché CHATme funzioni come preferisci.",
+    "editProfile": "Modifica profilo",
+    "openSettings": "Lingua e preferenze",
+    "manageDevices": "Gestisci dispositivi"
+  },
+  "profile": {
+    "title": "Profilo",
+    "bio": "Su di te",
+    "bioHint": "Fino a {max} caratteri.",
+    "save": "Salva",
+    "saved": "Salvato",
+    "memberSince": "Membro dal {date}"
+  },
+  "settings": {
+    "title": "Impostazioni",
+    "language": "Lingua",
+    "languageHint": "Le traduzioni contrassegnate come bozza sono ancora in revisione.",
+    "draftLabel": "bozza",
+    "timezone": "Fuso orario",
+    "performance": "Modalità prestazioni",
+    "performanceHint": "Automatica sceglie la modalità migliore per questo dispositivo e questa connessione.",
+    "performanceAuto": "Automatica",
+    "performanceLow": "Leggera",
+    "performanceNormal": "Standard",
+    "performanceHigh": "Avanzata",
+    "detected": "Rilevata: {mode}",
+    "privacy": "Privacy",
+    "profileVisibility": "Chi può vedere il mio profilo",
+    "whoCanMessage": "Chi può scrivermi",
+    "whoCanAddToGroups": "Chi può aggiungermi ai gruppi",
+    "levelEveryone": "Tutti",
+    "levelContacts": "I miei contatti",
+    "levelNobody": "Nessuno",
+    "showPresence": "Mostra quando sono online",
+    "sendReadReceipts": "Invia conferme di lettura",
+    "discoverable": "Consenti di trovarmi tramite nome utente",
+    "notifications": "Notifiche",
+    "notifyMessages": "Messaggi",
+    "notifyMentions": "Menzioni",
+    "notifyCalls": "Chiamate",
+    "notifyGroupActivity": "Attività dei gruppi",
+    "notifyCommunityActivity": "Attività delle community",
+    "quietHours": "Ore di silenzio",
+    "quietFrom": "Dalle",
+    "quietTo": "Alle",
+    "account": "Account",
+    "deleteAccount": "Elimina account",
+    "deleteWarning": "Elimina definitivamente il tuo account e disconnette tutti i dispositivi. L'operazione non può essere annullata.",
+    "confirmPassword": "Inserisci la password per confermare",
+    "deleteConfirm": "Elimina il mio account"
+  },
+  "devices": {
+    "title": "Dispositivi",
+    "count": "{count, plural, one {# dispositivo attivo} many {# di dispositivi attivi} other {# dispositivi attivi}}",
+    "thisDevice": "Questo dispositivo",
+    "lastActive": "Ultima attività {time}",
+    "signedIn": "Accesso effettuato il {date}",
+    "signOutDevice": "Disconnetti",
+    "signOutOthers": "Disconnetti tutti gli altri dispositivi",
+    "signedOutOthers": "{count, plural, =0 {Nessun altro dispositivo era connesso.} one {# dispositivo disconnesso.} many {# di dispositivi disconnessi.} other {# dispositivi disconnessi.}}",
+    "unknownDevice": "Dispositivo sconosciuto"
+  },
+  "network": {
+    "offline": "Sei offline. Puoi continuare a leggere; le modifiche verranno sincronizzate quando ti riconnetti.",
+    "online": "Di nuovo online"
+  },
+  "errors": {
+    "validation_failed": "Controlla i campi evidenziati.",
+    "unauthenticated": "Accedi di nuovo.",
+    "forbidden": "Non hai il permesso di farlo.",
+    "not_found": "Non abbiamo trovato ciò che cerchi.",
+    "conflict_email": "Esiste già un account con questa email.",
+    "conflict_username": "Questo nome utente è già in uso.",
+    "invalid_credentials": "Email o password non corretti.",
+    "rate_limited": "Troppi tentativi. Attendi un momento e riprova.",
+    "csrf_failed": "Non è stato possibile verificare la sessione. Ricarica la pagina.",
+    "service_unavailable": "CHATme non è temporaneamente disponibile. Riprova tra poco.",
+    "internal": "Si è verificato un problema da parte nostra.",
+    "network": "Impossibile raggiungere CHATme. Controlla la connessione."
+  }
+}

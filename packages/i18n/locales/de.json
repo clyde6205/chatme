@@ -1,0 +1,113 @@
+{
+  "app": {
+    "name": "CHATme",
+    "tagline": "Arbeiten. Spielen. In Verbindung bleiben. Weltweit mit CHATme.",
+    "loading": "Wird geladen…",
+    "skipToContent": "Zum Inhalt springen"
+  },
+  "nav": {
+    "home": "Start",
+    "profile": "Profil",
+    "settings": "Einstellungen",
+    "devices": "Geräte",
+    "back": "Zurück"
+  },
+  "auth": {
+    "signIn": "Anmelden",
+    "signOut": "Abmelden",
+    "createAccount": "Konto erstellen",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "passwordHint": "Mindestens {min} Zeichen. Ein längerer Satz ist sicherer.",
+    "username": "Benutzername",
+    "usernameHint": "Buchstaben, Ziffern und Unterstriche. Beginnt mit einem Buchstaben.",
+    "displayName": "Anzeigename",
+    "haveAccount": "Schon ein Konto?",
+    "noAccount": "Neu bei CHATme?",
+    "welcomeBack": "Willkommen zurück",
+    "joinTitle": "Bei CHATme registrieren",
+    "working": "Bitte warten…"
+  },
+  "home": {
+    "greeting": "Hallo, {name}",
+    "intro": "Dein Konto ist bereit. Richte dein Profil und deine Einstellungen ein, damit CHATme so funktioniert, wie du es möchtest.",
+    "editProfile": "Profil bearbeiten",
+    "openSettings": "Sprache und Einstellungen",
+    "manageDevices": "Geräte verwalten"
+  },
+  "profile": {
+    "title": "Profil",
+    "bio": "Über dich",
+    "bioHint": "Bis zu {max} Zeichen.",
+    "save": "Speichern",
+    "saved": "Gespeichert",
+    "memberSince": "Mitglied seit {date}"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "language": "Sprache",
+    "languageHint": "Als Entwurf markierte Übersetzungen werden noch geprüft.",
+    "draftLabel": "Entwurf",
+    "timezone": "Zeitzone",
+    "performance": "Leistungsmodus",
+    "performanceHint": "Automatisch wählt den besten Modus für dieses Gerät und diese Verbindung.",
+    "performanceAuto": "Automatisch",
+    "performanceLow": "Leicht",
+    "performanceNormal": "Standard",
+    "performanceHigh": "Erweitert",
+    "detected": "Erkannt: {mode}",
+    "privacy": "Datenschutz",
+    "profileVisibility": "Wer mein Profil sehen kann",
+    "whoCanMessage": "Wer mir schreiben kann",
+    "whoCanAddToGroups": "Wer mich zu Gruppen hinzufügen kann",
+    "levelEveryone": "Alle",
+    "levelContacts": "Meine Kontakte",
+    "levelNobody": "Niemand",
+    "showPresence": "Anzeigen, wenn ich online bin",
+    "sendReadReceipts": "Lesebestätigungen senden",
+    "discoverable": "Über meinen Benutzernamen auffindbar sein",
+    "notifications": "Benachrichtigungen",
+    "notifyMessages": "Nachrichten",
+    "notifyMentions": "Erwähnungen",
+    "notifyCalls": "Anrufe",
+    "notifyGroupActivity": "Gruppenaktivität",
+    "notifyCommunityActivity": "Community-Aktivität",
+    "quietHours": "Ruhezeiten",
+    "quietFrom": "Von",
+    "quietTo": "Bis",
+    "account": "Konto",
+    "deleteAccount": "Konto löschen",
+    "deleteWarning": "Dadurch wird dein Konto dauerhaft gelöscht und alle Geräte werden abgemeldet. Dies kann nicht rückgängig gemacht werden.",
+    "confirmPassword": "Gib zur Bestätigung dein Passwort ein",
+    "deleteConfirm": "Mein Konto löschen"
+  },
+  "devices": {
+    "title": "Geräte",
+    "count": "{count, plural, one {# aktives Gerät} other {# aktive Geräte}}",
+    "thisDevice": "Dieses Gerät",
+    "lastActive": "Zuletzt aktiv {time}",
+    "signedIn": "Angemeldet am {date}",
+    "signOutDevice": "Abmelden",
+    "signOutOthers": "Alle anderen Geräte abmelden",
+    "signedOutOthers": "{count, plural, =0 {Es waren keine anderen Geräte angemeldet.} one {# Gerät abgemeldet.} other {# Geräte abgemeldet.}}",
+    "unknownDevice": "Unbekanntes Gerät"
+  },
+  "network": {
+    "offline": "Du bist offline. Du kannst weiterlesen; Änderungen werden synchronisiert, sobald du wieder verbunden bist.",
+    "online": "Wieder online"
+  },
+  "errors": {
+    "validation_failed": "Bitte überprüfe die markierten Felder.",
+    "unauthenticated": "Bitte melde dich erneut an.",
+    "forbidden": "Dazu fehlt dir die Berechtigung.",
+    "not_found": "Das konnten wir nicht finden.",
+    "conflict_email": "Mit dieser E-Mail-Adresse gibt es bereits ein Konto.",
+    "conflict_username": "Dieser Benutzername ist bereits vergeben.",
+    "invalid_credentials": "E-Mail oder Passwort ist falsch.",
+    "rate_limited": "Zu viele Versuche. Bitte warte kurz und versuche es erneut.",
+    "csrf_failed": "Deine Sitzung konnte nicht bestätigt werden. Bitte lade die Seite neu.",
+    "service_unavailable": "CHATme ist vorübergehend nicht verfügbar. Bitte versuche es gleich noch einmal.",
+    "internal": "Bei uns ist etwas schiefgelaufen.",
+    "network": "CHATme ist nicht erreichbar. Prüfe deine Verbindung."
+  }
+}

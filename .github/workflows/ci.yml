@@ -1,0 +1,89 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Lint, typecheck, unit + integration tests, builds
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: chatme
+          POSTGRES_PASSWORD: chatme
+          POSTGRES_DB: chatme_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U chatme" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      TEST_DATABASE_URL: postgres://chatme:chatme@localhost:5432/chatme_test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - name: i18n catalog validation
+        run: pnpm i18n:check
+      - name: Unit and integration tests (real Postgres)
+        run: pnpm test
+      - name: Migration rollback check
+        run: |
+          pnpm --filter @chatme/api migrate down
+          pnpm --filter @chatme/api migrate latest
+        env:
+          DATABASE_URL: ${{ env.TEST_DATABASE_URL }}
+      - name: Production builds + web performance budget
+        run: pnpm build
+      - name: Dependency audit (high and critical)
+        run: pnpm audit --audit-level high --prod
+
+  e2e:
+    name: End-to-end (built PWA + API + Postgres, throttled Android profile)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: chatme
+          POSTGRES_PASSWORD: chatme
+          POSTGRES_DB: chatme_e2e
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U chatme" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      E2E_DATABASE_URL: postgres://chatme:chatme@localhost:5432/chatme_e2e
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @chatme/web exec playwright install --with-deps chromium
+      - run: pnpm --filter @chatme/web build
+      - run: pnpm --filter @chatme/web e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-traces
+          path: apps/web/test-results
+          retention-days: 7

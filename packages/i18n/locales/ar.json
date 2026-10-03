@@ -1,0 +1,113 @@
+{
+  "app": {
+    "name": "CHATme",
+    "tagline": "اعمل. العب. ابقَ على تواصل. عالميًا مع CHATme.",
+    "loading": "جارٍ التحميل…",
+    "skipToContent": "انتقل إلى المحتوى"
+  },
+  "nav": {
+    "home": "الرئيسية",
+    "profile": "الملف الشخصي",
+    "settings": "الإعدادات",
+    "devices": "الأجهزة",
+    "back": "رجوع"
+  },
+  "auth": {
+    "signIn": "تسجيل الدخول",
+    "signOut": "تسجيل الخروج",
+    "createAccount": "إنشاء حساب",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "passwordHint": "{min} أحرف على الأقل. العبارة الأطول أكثر أمانًا.",
+    "username": "اسم المستخدم",
+    "usernameHint": "أحرف لاتينية وأرقام وشرطات سفلية، ويبدأ بحرف.",
+    "displayName": "الاسم المعروض",
+    "haveAccount": "لديك حساب بالفعل؟",
+    "noAccount": "جديد على CHATme؟",
+    "welcomeBack": "مرحبًا بعودتك",
+    "joinTitle": "انضم إلى CHATme",
+    "working": "يُرجى الانتظار…"
+  },
+  "home": {
+    "greeting": "مرحبًا، {name}",
+    "intro": "حسابك جاهز. اضبط ملفك الشخصي وتفضيلاتك ليعمل CHATme بالطريقة التي تناسبك.",
+    "editProfile": "تعديل الملف الشخصي",
+    "openSettings": "اللغة والتفضيلات",
+    "manageDevices": "إدارة الأجهزة"
+  },
+  "profile": {
+    "title": "الملف الشخصي",
+    "bio": "نبذة عنك",
+    "bioHint": "حتى {max} حرفًا.",
+    "save": "حفظ",
+    "saved": "تم الحفظ",
+    "memberSince": "عضو منذ {date}"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "language": "اللغة",
+    "languageHint": "الترجمات المعلَّمة كمسودة لا تزال قيد المراجعة.",
+    "draftLabel": "مسودة",
+    "timezone": "المنطقة الزمنية",
+    "performance": "وضع الأداء",
+    "performanceHint": "يختار الوضع التلقائي أفضل وضع لهذا الجهاز وهذا الاتصال.",
+    "performanceAuto": "تلقائي",
+    "performanceLow": "خفيف",
+    "performanceNormal": "قياسي",
+    "performanceHigh": "غني",
+    "detected": "تم اكتشاف: {mode}",
+    "privacy": "الخصوصية",
+    "profileVisibility": "من يمكنه رؤية ملفي الشخصي",
+    "whoCanMessage": "من يمكنه مراسلتي",
+    "whoCanAddToGroups": "من يمكنه إضافتي إلى المجموعات",
+    "levelEveryone": "الجميع",
+    "levelContacts": "جهات اتصالي",
+    "levelNobody": "لا أحد",
+    "showPresence": "إظهار حالتي عند الاتصال",
+    "sendReadReceipts": "إرسال إشعارات القراءة",
+    "discoverable": "السماح للآخرين بالعثور عليّ باسم المستخدم",
+    "notifications": "الإشعارات",
+    "notifyMessages": "الرسائل",
+    "notifyMentions": "الإشارات",
+    "notifyCalls": "المكالمات",
+    "notifyGroupActivity": "نشاط المجموعات",
+    "notifyCommunityActivity": "نشاط المجتمعات",
+    "quietHours": "ساعات الهدوء",
+    "quietFrom": "من",
+    "quietTo": "إلى",
+    "account": "الحساب",
+    "deleteAccount": "حذف الحساب",
+    "deleteWarning": "سيؤدي هذا إلى حذف حسابك نهائيًا وتسجيل الخروج من جميع الأجهزة. لا يمكن التراجع عن ذلك.",
+    "confirmPassword": "أدخل كلمة المرور للتأكيد",
+    "deleteConfirm": "حذف حسابي"
+  },
+  "devices": {
+    "title": "الأجهزة",
+    "count": "{count, plural, zero {لا توجد أجهزة نشطة} one {جهاز نشط واحد} two {جهازان نشطان} few {# أجهزة نشطة} many {# جهازًا نشطًا} other {# جهاز نشط}}",
+    "thisDevice": "هذا الجهاز",
+    "lastActive": "آخر نشاط {time}",
+    "signedIn": "تم تسجيل الدخول في {date}",
+    "signOutDevice": "تسجيل الخروج",
+    "signOutOthers": "تسجيل الخروج من جميع الأجهزة الأخرى",
+    "signedOutOthers": "{count, plural, zero {لم تكن هناك أجهزة أخرى مسجَّل الدخول عليها.} one {تم تسجيل الخروج من جهاز واحد.} two {تم تسجيل الخروج من جهازين.} few {تم تسجيل الخروج من # أجهزة.} many {تم تسجيل الخروج من # جهازًا.} other {تم تسجيل الخروج من # جهاز.}}",
+    "unknownDevice": "جهاز غير معروف"
+  },
+  "network": {
+    "offline": "أنت غير متصل. يمكنك متابعة القراءة، وستتم مزامنة التغييرات عند عودة الاتصال.",
+    "online": "عاد الاتصال"
+  },
+  "errors": {
+    "validation_failed": "يُرجى مراجعة الحقول المميَّزة.",
+    "unauthenticated": "يُرجى تسجيل الدخول مرة أخرى.",
+    "forbidden": "ليس لديك إذن للقيام بذلك.",
+    "not_found": "لم نتمكن من العثور على ذلك.",
+    "conflict_email": "يوجد حساب بهذا البريد الإلكتروني بالفعل.",
+    "conflict_username": "اسم المستخدم هذا مستخدم بالفعل.",
+    "invalid_credentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
+    "rate_limited": "محاولات كثيرة جدًا. يُرجى الانتظار قليلًا ثم المحاولة مرة أخرى.",
+    "csrf_failed": "تعذّر التحقق من جلستك. يُرجى إعادة تحميل الصفحة.",
+    "service_unavailable": "CHATme غير متاح مؤقتًا. يُرجى المحاولة بعد قليل.",
+    "internal": "حدث خطأ من جانبنا.",
+    "network": "تعذّر الوصول إلى CHATme. تحقّق من اتصالك."
+  }
+}

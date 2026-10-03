@@ -1,0 +1,113 @@
+{
+  "app": {
+    "name": "CHATme",
+    "tagline": "Magtrabaho. Maglaro. Manatiling konektado. Global kasama ang CHATme.",
+    "loading": "Naglo-load…",
+    "skipToContent": "Lumaktaw sa nilalaman"
+  },
+  "nav": {
+    "home": "Home",
+    "profile": "Profile",
+    "settings": "Mga Setting",
+    "devices": "Mga Device",
+    "back": "Bumalik"
+  },
+  "auth": {
+    "signIn": "Mag-sign in",
+    "signOut": "Mag-sign out",
+    "createAccount": "Gumawa ng account",
+    "email": "Email",
+    "password": "Password",
+    "passwordHint": "Hindi bababa sa {min} na character. Mas ligtas ang mas mahabang parirala.",
+    "username": "Username",
+    "usernameHint": "Mga titik, numero at underscore. Nagsisimula sa titik.",
+    "displayName": "Display name",
+    "haveAccount": "May account ka na?",
+    "noAccount": "Bago sa CHATme?",
+    "welcomeBack": "Maligayang pagbabalik",
+    "joinTitle": "Sumali sa CHATme",
+    "working": "Sandali lang…"
+  },
+  "home": {
+    "greeting": "Kumusta, {name}",
+    "intro": "Handa na ang account mo. I-set up ang iyong profile at mga kagustuhan para gumana ang CHATme ayon sa gusto mo.",
+    "editProfile": "I-edit ang profile",
+    "openSettings": "Wika at mga kagustuhan",
+    "manageDevices": "Pamahalaan ang mga device"
+  },
+  "profile": {
+    "title": "Profile",
+    "bio": "Tungkol sa iyo",
+    "bioHint": "Hanggang {max} na character.",
+    "save": "I-save",
+    "saved": "Na-save",
+    "memberSince": "Miyembro mula {date}"
+  },
+  "settings": {
+    "title": "Mga Setting",
+    "language": "Wika",
+    "languageHint": "Sinusuri pa ang mga salin na may markang draft.",
+    "draftLabel": "draft",
+    "timezone": "Time zone",
+    "performance": "Performance mode",
+    "performanceHint": "Pinipili ng Auto ang pinakamainam na mode para sa device at koneksyong ito.",
+    "performanceAuto": "Auto",
+    "performanceLow": "Magaan",
+    "performanceNormal": "Karaniwan",
+    "performanceHigh": "Buo",
+    "detected": "Natukoy: {mode}",
+    "privacy": "Privacy",
+    "profileVisibility": "Sino ang makakakita ng profile ko",
+    "whoCanMessage": "Sino ang puwedeng mag-message sa akin",
+    "whoCanAddToGroups": "Sino ang puwedeng magdagdag sa akin sa mga grupo",
+    "levelEveryone": "Lahat",
+    "levelContacts": "Mga contact ko",
+    "levelNobody": "Walang sinuman",
+    "showPresence": "Ipakita kapag online ako",
+    "sendReadReceipts": "Magpadala ng read receipt",
+    "discoverable": "Hayaang mahanap ako gamit ang username",
+    "notifications": "Mga Notification",
+    "notifyMessages": "Mga mensahe",
+    "notifyMentions": "Mga mention",
+    "notifyCalls": "Mga tawag",
+    "notifyGroupActivity": "Aktibidad sa grupo",
+    "notifyCommunityActivity": "Aktibidad sa komunidad",
+    "quietHours": "Tahimik na oras",
+    "quietFrom": "Mula",
+    "quietTo": "Hanggang",
+    "account": "Account",
+    "deleteAccount": "Burahin ang account",
+    "deleteWarning": "Permanenteng mabubura ang account mo at masa-sign out ang lahat ng device. Hindi na ito maibabalik.",
+    "confirmPassword": "Ilagay ang password mo para kumpirmahin",
+    "deleteConfirm": "Burahin ang account ko"
+  },
+  "devices": {
+    "title": "Mga Device",
+    "count": "{count, plural, one {# aktibong device} other {# na aktibong device}}",
+    "thisDevice": "Ang device na ito",
+    "lastActive": "Huling aktibo {time}",
+    "signedIn": "Nag-sign in noong {date}",
+    "signOutDevice": "Mag-sign out",
+    "signOutOthers": "I-sign out ang lahat ng ibang device",
+    "signedOutOthers": "{count, plural, =0 {Walang ibang device na naka-sign in.} one {Na-sign out ang # device.} other {Na-sign out ang # na device.}}",
+    "unknownDevice": "Hindi kilalang device"
+  },
+  "network": {
+    "offline": "Offline ka. Puwede kang magpatuloy sa pagbabasa; masi-sync ang mga pagbabago kapag nakakonekta ka ulit.",
+    "online": "Online ulit"
+  },
+  "errors": {
+    "validation_failed": "Pakisuri ang mga naka-highlight na field.",
+    "unauthenticated": "Mag-sign in ulit.",
+    "forbidden": "Wala kang pahintulot na gawin iyan.",
+    "not_found": "Hindi namin iyon mahanap.",
+    "conflict_email": "May account na gamit ang email na ito.",
+    "conflict_username": "May gumagamit na ng username na iyan.",
+    "invalid_credentials": "Mali ang email o password.",
+    "rate_limited": "Masyadong maraming pagsubok. Maghintay sandali at subukan ulit.",
+    "csrf_failed": "Hindi ma-verify ang session mo. Paki-reload ang page.",
+    "service_unavailable": "Pansamantalang hindi available ang CHATme. Subukan ulit mamaya.",
+    "internal": "May nagkaproblema sa panig namin.",
+    "network": "Hindi maabot ang CHATme. Suriin ang iyong koneksyon."
+  }
+}

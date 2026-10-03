@@ -1,0 +1,113 @@
+{
+  "app": {
+    "name": "CHATme",
+    "tagline": "کام کریں۔ کھیلیں۔ جڑے رہیں۔ CHATme کے ساتھ دنیا بھر میں۔",
+    "loading": "لوڈ ہو رہا ہے…",
+    "skipToContent": "مواد پر جائیں"
+  },
+  "nav": {
+    "home": "ہوم",
+    "profile": "پروفائل",
+    "settings": "ترتیبات",
+    "devices": "آلات",
+    "back": "واپس"
+  },
+  "auth": {
+    "signIn": "سائن ان کریں",
+    "signOut": "سائن آؤٹ کریں",
+    "createAccount": "اکاؤنٹ بنائیں",
+    "email": "ای میل",
+    "password": "پاس ورڈ",
+    "passwordHint": "کم از کم {min} حروف۔ لمبا جملہ زیادہ محفوظ ہوتا ہے۔",
+    "username": "صارف نام",
+    "usernameHint": "انگریزی حروف، ہندسے اور انڈر اسکور۔ حرف سے شروع ہو۔",
+    "displayName": "ظاہری نام",
+    "haveAccount": "پہلے سے اکاؤنٹ ہے؟",
+    "noAccount": "CHATme پر نئے ہیں؟",
+    "welcomeBack": "دوبارہ خوش آمدید",
+    "joinTitle": "CHATme میں شامل ہوں",
+    "working": "براہ کرم انتظار کریں…"
+  },
+  "home": {
+    "greeting": "السلام علیکم، {name}",
+    "intro": "آپ کا اکاؤنٹ تیار ہے۔ اپنا پروفائل اور ترجیحات ترتیب دیں تاکہ CHATme آپ کی مرضی کے مطابق کام کرے۔",
+    "editProfile": "پروفائل میں ترمیم کریں",
+    "openSettings": "زبان اور ترجیحات",
+    "manageDevices": "آلات کا نظم کریں"
+  },
+  "profile": {
+    "title": "پروفائل",
+    "bio": "آپ کے بارے میں",
+    "bioHint": "زیادہ سے زیادہ {max} حروف۔",
+    "save": "محفوظ کریں",
+    "saved": "محفوظ ہو گیا",
+    "memberSince": "{date} سے رکن"
+  },
+  "settings": {
+    "title": "ترتیبات",
+    "language": "زبان",
+    "languageHint": "مسودہ کے طور پر نشان زد تراجم کا ابھی جائزہ لیا جا رہا ہے۔",
+    "draftLabel": "مسودہ",
+    "timezone": "ٹائم زون",
+    "performance": "کارکردگی موڈ",
+    "performanceHint": "خودکار اس آلے اور کنکشن کے لیے بہترین موڈ منتخب کرتا ہے۔",
+    "performanceAuto": "خودکار",
+    "performanceLow": "ہلکا",
+    "performanceNormal": "معیاری",
+    "performanceHigh": "بھرپور",
+    "detected": "شناخت شدہ: {mode}",
+    "privacy": "رازداری",
+    "profileVisibility": "میرا پروفائل کون دیکھ سکتا ہے",
+    "whoCanMessage": "مجھے کون پیغام بھیج سکتا ہے",
+    "whoCanAddToGroups": "مجھے گروپس میں کون شامل کر سکتا ہے",
+    "levelEveryone": "سب",
+    "levelContacts": "میرے رابطے",
+    "levelNobody": "کوئی نہیں",
+    "showPresence": "آن لائن ہونے پر دکھائیں",
+    "sendReadReceipts": "پڑھنے کی رسید بھیجیں",
+    "discoverable": "لوگ مجھے صارف نام سے تلاش کر سکیں",
+    "notifications": "اطلاعات",
+    "notifyMessages": "پیغامات",
+    "notifyMentions": "تذکرے",
+    "notifyCalls": "کالز",
+    "notifyGroupActivity": "گروپ کی سرگرمی",
+    "notifyCommunityActivity": "کمیونٹی کی سرگرمی",
+    "quietHours": "خاموش اوقات",
+    "quietFrom": "سے",
+    "quietTo": "تک",
+    "account": "اکاؤنٹ",
+    "deleteAccount": "اکاؤنٹ حذف کریں",
+    "deleteWarning": "اس سے آپ کا اکاؤنٹ مستقل طور پر حذف ہو جائے گا اور تمام آلات سے سائن آؤٹ ہو جائے گا۔ اسے واپس نہیں کیا جا سکتا۔",
+    "confirmPassword": "تصدیق کے لیے اپنا پاس ورڈ درج کریں",
+    "deleteConfirm": "میرا اکاؤنٹ حذف کریں"
+  },
+  "devices": {
+    "title": "آلات",
+    "count": "{count, plural, one {# فعال آلہ} other {# فعال آلات}}",
+    "thisDevice": "یہ آلہ",
+    "lastActive": "آخری بار فعال {time}",
+    "signedIn": "{date} کو سائن ان کیا",
+    "signOutDevice": "سائن آؤٹ کریں",
+    "signOutOthers": "باقی تمام آلات سے سائن آؤٹ کریں",
+    "signedOutOthers": "{count, plural, =0 {کوئی اور آلہ سائن ان نہیں تھا۔} one {# آلے سے سائن آؤٹ کیا گیا۔} other {# آلات سے سائن آؤٹ کیا گیا۔}}",
+    "unknownDevice": "نامعلوم آلہ"
+  },
+  "network": {
+    "offline": "آپ آف لائن ہیں۔ آپ پڑھنا جاری رکھ سکتے ہیں؛ دوبارہ جڑنے پر تبدیلیاں ہم آہنگ ہو جائیں گی۔",
+    "online": "دوبارہ آن لائن"
+  },
+  "errors": {
+    "validation_failed": "براہ کرم نشان زد خانے چیک کریں۔",
+    "unauthenticated": "براہ کرم دوبارہ سائن ان کریں۔",
+    "forbidden": "آپ کو یہ کرنے کی اجازت نہیں ہے۔",
+    "not_found": "ہمیں یہ نہیں ملا۔",
+    "conflict_email": "اس ای میل کے ساتھ پہلے سے ایک اکاؤنٹ موجود ہے۔",
+    "conflict_username": "یہ صارف نام پہلے سے لیا جا چکا ہے۔",
+    "invalid_credentials": "ای میل یا پاس ورڈ غلط ہے۔",
+    "rate_limited": "بہت زیادہ کوششیں۔ براہ کرم کچھ دیر رک کر دوبارہ کوشش کریں۔",
+    "csrf_failed": "آپ کے سیشن کی تصدیق نہیں ہو سکی۔ براہ کرم صفحہ دوبارہ لوڈ کریں۔",
+    "service_unavailable": "CHATme عارضی طور پر دستیاب نہیں ہے۔ براہ کرم تھوڑی دیر بعد کوشش کریں۔",
+    "internal": "ہماری طرف سے کچھ غلط ہو گیا۔",
+    "network": "CHATme تک رسائی نہیں ہو رہی۔ اپنا کنکشن چیک کریں۔"
+  }
+}

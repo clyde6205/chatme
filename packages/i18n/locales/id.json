@@ -1,0 +1,113 @@
+{
+  "app": {
+    "name": "CHATme",
+    "tagline": "Bekerja. Bermain. Tetap terhubung. Global bersama CHATme.",
+    "loading": "Memuat…",
+    "skipToContent": "Langsung ke konten"
+  },
+  "nav": {
+    "home": "Beranda",
+    "profile": "Profil",
+    "settings": "Pengaturan",
+    "devices": "Perangkat",
+    "back": "Kembali"
+  },
+  "auth": {
+    "signIn": "Masuk",
+    "signOut": "Keluar",
+    "createAccount": "Buat akun",
+    "email": "Email",
+    "password": "Kata sandi",
+    "passwordHint": "Minimal {min} karakter. Frasa yang lebih panjang lebih aman.",
+    "username": "Nama pengguna",
+    "usernameHint": "Huruf, angka, dan garis bawah. Diawali dengan huruf.",
+    "displayName": "Nama tampilan",
+    "haveAccount": "Sudah punya akun?",
+    "noAccount": "Baru di CHATme?",
+    "welcomeBack": "Selamat datang kembali",
+    "joinTitle": "Bergabung dengan CHATme",
+    "working": "Mohon tunggu…"
+  },
+  "home": {
+    "greeting": "Hai, {name}",
+    "intro": "Akun Anda sudah siap. Atur profil dan preferensi Anda agar CHATme bekerja sesuai keinginan Anda.",
+    "editProfile": "Edit profil",
+    "openSettings": "Bahasa dan preferensi",
+    "manageDevices": "Kelola perangkat"
+  },
+  "profile": {
+    "title": "Profil",
+    "bio": "Tentang Anda",
+    "bioHint": "Maksimal {max} karakter.",
+    "save": "Simpan",
+    "saved": "Tersimpan",
+    "memberSince": "Anggota sejak {date}"
+  },
+  "settings": {
+    "title": "Pengaturan",
+    "language": "Bahasa",
+    "languageHint": "Terjemahan yang ditandai sebagai draf masih ditinjau.",
+    "draftLabel": "draf",
+    "timezone": "Zona waktu",
+    "performance": "Mode performa",
+    "performanceHint": "Otomatis memilih mode terbaik untuk perangkat dan koneksi ini.",
+    "performanceAuto": "Otomatis",
+    "performanceLow": "Ringan",
+    "performanceNormal": "Standar",
+    "performanceHigh": "Lengkap",
+    "detected": "Terdeteksi: {mode}",
+    "privacy": "Privasi",
+    "profileVisibility": "Siapa yang dapat melihat profil saya",
+    "whoCanMessage": "Siapa yang dapat mengirimi saya pesan",
+    "whoCanAddToGroups": "Siapa yang dapat menambahkan saya ke grup",
+    "levelEveryone": "Semua orang",
+    "levelContacts": "Kontak saya",
+    "levelNobody": "Tidak ada",
+    "showPresence": "Tampilkan saat saya online",
+    "sendReadReceipts": "Kirim tanda dibaca",
+    "discoverable": "Izinkan orang menemukan saya lewat nama pengguna",
+    "notifications": "Notifikasi",
+    "notifyMessages": "Pesan",
+    "notifyMentions": "Sebutan",
+    "notifyCalls": "Panggilan",
+    "notifyGroupActivity": "Aktivitas grup",
+    "notifyCommunityActivity": "Aktivitas komunitas",
+    "quietHours": "Jam tenang",
+    "quietFrom": "Dari",
+    "quietTo": "Sampai",
+    "account": "Akun",
+    "deleteAccount": "Hapus akun",
+    "deleteWarning": "Tindakan ini menghapus akun Anda secara permanen dan mengeluarkan semua perangkat. Tidak dapat dibatalkan.",
+    "confirmPassword": "Masukkan kata sandi untuk konfirmasi",
+    "deleteConfirm": "Hapus akun saya"
+  },
+  "devices": {
+    "title": "Perangkat",
+    "count": "{count, plural, other {# perangkat aktif}}",
+    "thisDevice": "Perangkat ini",
+    "lastActive": "Terakhir aktif {time}",
+    "signedIn": "Masuk pada {date}",
+    "signOutDevice": "Keluar",
+    "signOutOthers": "Keluar dari semua perangkat lain",
+    "signedOutOthers": "{count, plural, =0 {Tidak ada perangkat lain yang masuk.} other {Berhasil keluar dari # perangkat.}}",
+    "unknownDevice": "Perangkat tidak dikenal"
+  },
+  "network": {
+    "offline": "Anda sedang offline. Anda tetap bisa membaca; perubahan akan disinkronkan saat tersambung kembali.",
+    "online": "Kembali online"
+  },
+  "errors": {
+    "validation_failed": "Periksa kolom yang ditandai.",
+    "unauthenticated": "Silakan masuk lagi.",
+    "forbidden": "Anda tidak memiliki izin untuk melakukan itu.",
+    "not_found": "Kami tidak dapat menemukannya.",
+    "conflict_email": "Akun dengan email ini sudah ada.",
+    "conflict_username": "Nama pengguna itu sudah dipakai.",
+    "invalid_credentials": "Email atau kata sandi salah.",
+    "rate_limited": "Terlalu banyak percobaan. Tunggu sebentar lalu coba lagi.",
+    "csrf_failed": "Sesi Anda tidak dapat diverifikasi. Muat ulang halaman.",
+    "service_unavailable": "CHATme sedang tidak tersedia untuk sementara. Coba lagi sebentar lagi.",
+    "internal": "Terjadi kesalahan di pihak kami.",
+    "network": "Tidak dapat terhubung ke CHATme. Periksa koneksi Anda."
+  }
+}

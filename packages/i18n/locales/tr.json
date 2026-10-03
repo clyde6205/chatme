@@ -1,0 +1,113 @@
+{
+  "app": {
+    "name": "CHATme",
+    "tagline": "Çalış. Oyna. Bağlantıda kal. CHATme ile küresel.",
+    "loading": "Yükleniyor…",
+    "skipToContent": "İçeriğe geç"
+  },
+  "nav": {
+    "home": "Ana sayfa",
+    "profile": "Profil",
+    "settings": "Ayarlar",
+    "devices": "Cihazlar",
+    "back": "Geri"
+  },
+  "auth": {
+    "signIn": "Giriş yap",
+    "signOut": "Çıkış yap",
+    "createAccount": "Hesap oluştur",
+    "email": "E-posta",
+    "password": "Şifre",
+    "passwordHint": "En az {min} karakter. Daha uzun bir ifade daha güvenlidir.",
+    "username": "Kullanıcı adı",
+    "usernameHint": "Harf, rakam ve alt çizgi. Bir harfle başlar.",
+    "displayName": "Görünen ad",
+    "haveAccount": "Zaten hesabın var mı?",
+    "noAccount": "CHATme'de yeni misin?",
+    "welcomeBack": "Tekrar hoş geldin",
+    "joinTitle": "CHATme'ye katıl",
+    "working": "Lütfen bekle…"
+  },
+  "home": {
+    "greeting": "Merhaba {name}",
+    "intro": "Hesabın hazır. CHATme'nin istediğin gibi çalışması için profilini ve tercihlerini ayarla.",
+    "editProfile": "Profili düzenle",
+    "openSettings": "Dil ve tercihler",
+    "manageDevices": "Cihazları yönet"
+  },
+  "profile": {
+    "title": "Profil",
+    "bio": "Hakkında",
+    "bioHint": "En fazla {max} karakter.",
+    "save": "Kaydet",
+    "saved": "Kaydedildi",
+    "memberSince": "Üyelik tarihi: {date}"
+  },
+  "settings": {
+    "title": "Ayarlar",
+    "language": "Dil",
+    "languageHint": "Taslak olarak işaretlenen çeviriler hâlâ gözden geçiriliyor.",
+    "draftLabel": "taslak",
+    "timezone": "Saat dilimi",
+    "performance": "Performans modu",
+    "performanceHint": "Otomatik, bu cihaz ve bağlantı için en iyi modu seçer.",
+    "performanceAuto": "Otomatik",
+    "performanceLow": "Hafif",
+    "performanceNormal": "Standart",
+    "performanceHigh": "Zengin",
+    "detected": "Algılanan: {mode}",
+    "privacy": "Gizlilik",
+    "profileVisibility": "Profilimi kimler görebilir",
+    "whoCanMessage": "Bana kimler mesaj gönderebilir",
+    "whoCanAddToGroups": "Beni gruplara kimler ekleyebilir",
+    "levelEveryone": "Herkes",
+    "levelContacts": "Kişilerim",
+    "levelNobody": "Hiç kimse",
+    "showPresence": "Çevrimiçi olduğumu göster",
+    "sendReadReceipts": "Okundu bilgisi gönder",
+    "discoverable": "Kullanıcı adımla bulunabilir olayım",
+    "notifications": "Bildirimler",
+    "notifyMessages": "Mesajlar",
+    "notifyMentions": "Bahsetmeler",
+    "notifyCalls": "Aramalar",
+    "notifyGroupActivity": "Grup etkinliği",
+    "notifyCommunityActivity": "Topluluk etkinliği",
+    "quietHours": "Sessiz saatler",
+    "quietFrom": "Başlangıç",
+    "quietTo": "Bitiş",
+    "account": "Hesap",
+    "deleteAccount": "Hesabı sil",
+    "deleteWarning": "Bu işlem hesabını kalıcı olarak siler ve tüm cihazlarda oturumu kapatır. Geri alınamaz.",
+    "confirmPassword": "Onaylamak için şifreni gir",
+    "deleteConfirm": "Hesabımı sil"
+  },
+  "devices": {
+    "title": "Cihazlar",
+    "count": "{count, plural, one {# etkin cihaz} other {# etkin cihaz}}",
+    "thisDevice": "Bu cihaz",
+    "lastActive": "Son etkinlik: {time}",
+    "signedIn": "Giriş tarihi: {date}",
+    "signOutDevice": "Çıkış yap",
+    "signOutOthers": "Diğer tüm cihazlarda çıkış yap",
+    "signedOutOthers": "{count, plural, =0 {Oturumu açık başka cihaz yoktu.} one {# cihazda oturum kapatıldı.} other {# cihazda oturum kapatıldı.}}",
+    "unknownDevice": "Bilinmeyen cihaz"
+  },
+  "network": {
+    "offline": "Çevrimdışısın. Okumaya devam edebilirsin; yeniden bağlandığında değişiklikler eşitlenecek.",
+    "online": "Yeniden çevrimiçi"
+  },
+  "errors": {
+    "validation_failed": "Lütfen işaretli alanları kontrol et.",
+    "unauthenticated": "Lütfen tekrar giriş yap.",
+    "forbidden": "Bunu yapma iznin yok.",
+    "not_found": "Bunu bulamadık.",
+    "conflict_email": "Bu e-posta ile zaten bir hesap var.",
+    "conflict_username": "Bu kullanıcı adı alınmış.",
+    "invalid_credentials": "E-posta veya şifre hatalı.",
+    "rate_limited": "Çok fazla deneme. Lütfen biraz bekleyip tekrar dene.",
+    "csrf_failed": "Oturumun doğrulanamadı. Lütfen sayfayı yenile.",
+    "service_unavailable": "CHATme geçici olarak kullanılamıyor. Lütfen birazdan tekrar dene.",
+    "internal": "Bizim tarafımızda bir sorun oluştu.",
+    "network": "CHATme'ye ulaşılamıyor. Bağlantını kontrol et."
+  }
+}

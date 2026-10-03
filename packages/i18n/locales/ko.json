@@ -1,0 +1,113 @@
+{
+  "app": {
+    "name": "CHATme",
+    "tagline": "일하고. 놀고. 계속 연결되세요. CHATme와 함께 전 세계로.",
+    "loading": "불러오는 중…",
+    "skipToContent": "본문으로 건너뛰기"
+  },
+  "nav": {
+    "home": "홈",
+    "profile": "프로필",
+    "settings": "설정",
+    "devices": "기기",
+    "back": "뒤로"
+  },
+  "auth": {
+    "signIn": "로그인",
+    "signOut": "로그아웃",
+    "createAccount": "계정 만들기",
+    "email": "이메일",
+    "password": "비밀번호",
+    "passwordHint": "{min}자 이상. 긴 문구일수록 더 안전합니다.",
+    "username": "사용자 이름",
+    "usernameHint": "영문자, 숫자, 밑줄만 사용. 영문자로 시작해야 합니다.",
+    "displayName": "표시 이름",
+    "haveAccount": "이미 계정이 있으신가요?",
+    "noAccount": "CHATme가 처음이신가요?",
+    "welcomeBack": "다시 오신 것을 환영합니다",
+    "joinTitle": "CHATme 가입하기",
+    "working": "잠시만 기다려 주세요…"
+  },
+  "home": {
+    "greeting": "안녕하세요, {name}님",
+    "intro": "계정이 준비되었습니다. 프로필과 환경설정을 지정해 CHATme를 원하는 대로 사용하세요.",
+    "editProfile": "프로필 수정",
+    "openSettings": "언어 및 환경설정",
+    "manageDevices": "기기 관리"
+  },
+  "profile": {
+    "title": "프로필",
+    "bio": "소개",
+    "bioHint": "최대 {max}자.",
+    "save": "저장",
+    "saved": "저장됨",
+    "memberSince": "{date}부터 회원"
+  },
+  "settings": {
+    "title": "설정",
+    "language": "언어",
+    "languageHint": "초안으로 표시된 번역은 아직 검토 중입니다.",
+    "draftLabel": "초안",
+    "timezone": "시간대",
+    "performance": "성능 모드",
+    "performanceHint": "자동은 이 기기와 연결에 가장 적합한 모드를 선택합니다.",
+    "performanceAuto": "자동",
+    "performanceLow": "가볍게",
+    "performanceNormal": "표준",
+    "performanceHigh": "풍부하게",
+    "detected": "감지됨: {mode}",
+    "privacy": "개인정보 보호",
+    "profileVisibility": "내 프로필을 볼 수 있는 사람",
+    "whoCanMessage": "나에게 메시지를 보낼 수 있는 사람",
+    "whoCanAddToGroups": "나를 그룹에 추가할 수 있는 사람",
+    "levelEveryone": "모든 사람",
+    "levelContacts": "내 연락처",
+    "levelNobody": "아무도 없음",
+    "showPresence": "온라인 상태 표시",
+    "sendReadReceipts": "읽음 확인 보내기",
+    "discoverable": "사용자 이름으로 나를 찾을 수 있게 하기",
+    "notifications": "알림",
+    "notifyMessages": "메시지",
+    "notifyMentions": "멘션",
+    "notifyCalls": "통화",
+    "notifyGroupActivity": "그룹 활동",
+    "notifyCommunityActivity": "커뮤니티 활동",
+    "quietHours": "방해 금지 시간",
+    "quietFrom": "시작",
+    "quietTo": "종료",
+    "account": "계정",
+    "deleteAccount": "계정 삭제",
+    "deleteWarning": "계정이 영구적으로 삭제되고 모든 기기에서 로그아웃됩니다. 되돌릴 수 없습니다.",
+    "confirmPassword": "확인을 위해 비밀번호를 입력하세요",
+    "deleteConfirm": "내 계정 삭제"
+  },
+  "devices": {
+    "title": "기기",
+    "count": "{count, plural, other {활성 기기 #대}}",
+    "thisDevice": "이 기기",
+    "lastActive": "마지막 활동 {time}",
+    "signedIn": "{date}에 로그인함",
+    "signOutDevice": "로그아웃",
+    "signOutOthers": "다른 모든 기기에서 로그아웃",
+    "signedOutOthers": "{count, plural, =0 {로그인된 다른 기기가 없었습니다.} other {기기 #대에서 로그아웃했습니다.}}",
+    "unknownDevice": "알 수 없는 기기"
+  },
+  "network": {
+    "offline": "오프라인 상태입니다. 계속 읽을 수 있으며, 다시 연결되면 변경 사항이 동기화됩니다.",
+    "online": "다시 온라인 상태입니다"
+  },
+  "errors": {
+    "validation_failed": "표시된 항목을 확인해 주세요.",
+    "unauthenticated": "다시 로그인해 주세요.",
+    "forbidden": "이 작업을 수행할 권한이 없습니다.",
+    "not_found": "찾을 수 없습니다.",
+    "conflict_email": "이 이메일로 가입된 계정이 이미 있습니다.",
+    "conflict_username": "이미 사용 중인 사용자 이름입니다.",
+    "invalid_credentials": "이메일 또는 비밀번호가 올바르지 않습니다.",
+    "rate_limited": "시도 횟수가 너무 많습니다. 잠시 후 다시 시도해 주세요.",
+    "csrf_failed": "세션을 확인할 수 없습니다. 페이지를 새로고침해 주세요.",
+    "service_unavailable": "CHATme를 일시적으로 사용할 수 없습니다. 잠시 후 다시 시도해 주세요.",
+    "internal": "저희 쪽에서 문제가 발생했습니다.",
+    "network": "CHATme에 연결할 수 없습니다. 연결 상태를 확인해 주세요."
+  }
+}
