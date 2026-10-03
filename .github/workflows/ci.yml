@@ -31,11 +31,13 @@ jobs:
       TEST_DATABASE_URL: postgres://chatme:chatme@localhost:5432/chatme_test
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      # pnpm via corepack (version pinned by "packageManager"), so CI needs only GitHub-owned actions.
+      - run: corepack enable
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           cache: pnpm
+      - run: corepack enable
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
       - run: pnpm typecheck
@@ -72,11 +74,13 @@ jobs:
       E2E_DATABASE_URL: postgres://chatme:chatme@localhost:5432/chatme_e2e
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      # pnpm via corepack (version pinned by "packageManager"), so CI needs only GitHub-owned actions.
+      - run: corepack enable
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           cache: pnpm
+      - run: corepack enable
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @chatme/web exec playwright install --with-deps chromium
       - run: pnpm --filter @chatme/web build
