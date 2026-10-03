@@ -5,6 +5,10 @@ import { isUniqueViolation, type DB } from '../../db/database.js';
 import { generateSessionToken, getDummyHash, hashPassword, hashToken, verifyPassword } from '../../lib/crypto.js';
 import { AppError } from '../../lib/errors.js';
 import { recordAudit } from '../audit/service.js';
+import { enqueueEmail } from '../email/outbox.js';
+import type { Bus } from '../realtime/bus.js';
+import { publishUserEvent } from '../realtime/events.js';
+import { recipientOf, sendVerification } from './recovery.js';
 import { DEFAULT_NOTIFICATIONS, DEFAULT_PRIVACY } from '../users/service.js';
 
 export interface IssuedSession {
@@ -59,6 +63,7 @@ export async function register(db: DB, config: Config, input: RegisterRequest): 
         .execute();
       const session = await createSession(trx, config, user.id, input.device);
       await recordAudit(trx, { action: 'auth.register', userId: user.id, sessionId: session.sessionId, metadata: { platform: input.device.platform } });
+      await sendVerification(trx, config, { userId: user.id, email: input.email, name: input.displayName, locale: input.locale ?? DEFAULT_LOCALE });
       return session;
     });
   } catch (err) {
@@ -83,32 +88,67 @@ export async function login(db: DB, config: Config, input: LoginRequest): Promis
     if (row) await recordAudit(db, { action: 'auth.login_failed', userId: row.user_id });
     throw new AppError('invalid_credentials', 401);
   }
-  const session = await createSession(db, config, row.user_id, input.device);
-  await recordAudit(db, { action: 'auth.login', userId: row.user_id, sessionId: session.sessionId, metadata: { platform: input.device.platform } });
-  return session;
+  return db.transaction().execute(async (trx) => {
+    const session = await createSession(trx, config, row.user_id, input.device);
+    await recordAudit(trx, { action: 'auth.login', userId: row.user_id, sessionId: session.sessionId, metadata: { platform: input.device.platform } });
+    // Security notice for every sign-in: sessions last months, so sign-ins are rare and each one matters.
+    const r = await recipientOf(trx, row.user_id);
+    if (r) {
+      const device = input.device.name ? `${input.device.name} (${input.device.platform})` : input.device.platform;
+      await enqueueEmail(trx, {
+        userId: r.userId,
+        to: r.email,
+        locale: r.locale,
+        template: { kind: 'new_sign_in', name: r.name, device, resetLink: `${config.webBaseUrl}/forgot-password` },
+      });
+    }
+    return session;
+  });
+}
+
+/**
+ * Tell every instance to close sockets of revoked sessions, and the user's other
+ * devices to refresh their session lists. Runs inside the revoking transaction,
+ * so nothing is announced for a revocation that rolled back.
+ */
+export async function announceRevoked(trx: DB, bus: Bus, userId: string, sessionIds: string[]) {
+  if (!sessionIds.length) return;
+  await bus.publish({ k: 'rv', u: userId, sids: sessionIds }, trx);
+  await publishUserEvent(trx, bus, userId, 'session.revoked', { sessionIds });
 }
 
 /** Deleting the session's device cascades to the session itself. */
-export async function revokeSession(db: DB, userId: string, sessionId: string): Promise<boolean> {
-  const row = await db.selectFrom('sessions').select('device_id').where('id', '=', sessionId).where('user_id', '=', userId).executeTakeFirst();
-  if (!row) return false;
-  await db.deleteFrom('devices').where('id', '=', row.device_id).where('user_id', '=', userId).execute();
-  return true;
+export async function revokeSession(db: DB, bus: Bus, userId: string, sessionId: string): Promise<boolean> {
+  return db.transaction().execute(async (trx) => {
+    const row = await trx.selectFrom('sessions').select('device_id').where('id', '=', sessionId).where('user_id', '=', userId).executeTakeFirst();
+    if (!row) return false;
+    await trx.deleteFrom('devices').where('id', '=', row.device_id).where('user_id', '=', userId).execute();
+    await announceRevoked(trx, bus, userId, [sessionId]);
+    return true;
+  });
 }
 
-export async function revokeOtherSessions(db: DB, userId: string, keepSessionId: string): Promise<number> {
-  const keep = await db.selectFrom('sessions').select('device_id').where('id', '=', keepSessionId).executeTakeFirstOrThrow();
-  const res = await db.deleteFrom('devices').where('user_id', '=', userId).where('id', '!=', keep.device_id).executeTakeFirst();
-  return Number(res.numDeletedRows);
+export async function revokeOtherSessions(db: DB, bus: Bus, userId: string, keepSessionId: string): Promise<number> {
+  return db.transaction().execute(async (trx) => {
+    const keep = await trx.selectFrom('sessions').select('device_id').where('id', '=', keepSessionId).executeTakeFirstOrThrow();
+    const ids = (await trx.selectFrom('sessions').select('id').where('user_id', '=', userId).where('device_id', '!=', keep.device_id).execute()).map((r) => r.id);
+    const res = await trx.deleteFrom('devices').where('user_id', '=', userId).where('id', '!=', keep.device_id).executeTakeFirst();
+    await announceRevoked(trx, bus, userId, ids);
+    return Number(res.numDeletedRows);
+  });
 }
 
-export async function deleteAccount(db: DB, userId: string, password: string): Promise<void> {
+export async function deleteAccount(db: DB, bus: Bus, userId: string, password: string): Promise<void> {
   const cred = await db.selectFrom('user_credentials').select('password_hash').where('user_id', '=', userId).executeTakeFirst();
   if (!cred || !(await verifyPassword(cred.password_hash, password))) throw new AppError('invalid_credentials', 401);
   await db.transaction().execute(async (trx) => {
-    // ON DELETE CASCADE removes identities, credentials, preferences, devices and sessions.
+    const r = await recipientOf(trx, userId);
+    // ON DELETE CASCADE removes identities, credentials, preferences, devices, sessions,
+    // tokens, events and presence. The outbox row has no foreign key, so the notice survives.
     await trx.deleteFrom('users').where('id', '=', userId).execute();
     await recordAudit(trx, { action: 'account.deleted', userId });
+    if (r) await enqueueEmail(trx, { userId: null, to: r.email, locale: r.locale, template: { kind: 'account_deleted', name: r.name } });
+    await bus.publish({ k: 'rv', u: userId, all: true }, trx);
   });
 }
 

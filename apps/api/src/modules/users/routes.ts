@@ -4,11 +4,13 @@ import { sql } from 'kysely';
 import { isUniqueViolation, type DB } from '../../db/database.js';
 import { AppError, parse } from '../../lib/errors.js';
 import { authOf, requireAuth } from '../../plugins/auth.js';
+import type { Runtime } from '../../runtime.js';
 import { recordAudit } from '../audit/service.js';
+import { publishUserEvent, publishUserEventTx } from '../realtime/events.js';
 import { getMe } from './service.js';
 
-export function userRoutes(app: FastifyInstance, deps: { db: DB }) {
-  const { db } = deps;
+export function userRoutes(app: FastifyInstance, deps: { db: DB; runtime: Runtime }) {
+  const { db, runtime } = deps;
 
   app.get('/v1/me', { preHandler: requireAuth }, async (req) => getMe(db, authOf(req).userId));
 
@@ -37,6 +39,8 @@ export function userRoutes(app: FastifyInstance, deps: { db: DB }) {
       if (isUniqueViolation(err, 'users_username_key')) throw new AppError('conflict_username', 409);
       throw err;
     }
+    // Other signed-in devices refresh their copy of the profile.
+    await publishUserEventTx(db, runtime.bus, auth.userId, 'me.updated', { fields: Object.keys(input) });
     return getMe(db, auth.userId);
   });
 
@@ -69,7 +73,17 @@ export function userRoutes(app: FastifyInstance, deps: { db: DB }) {
           .where('user_id', '=', auth.userId)
           .execute();
       }
+      await publishUserEvent(trx, runtime.bus, auth.userId, 'me.updated', { fields: Object.keys(input) });
     });
+    // Hiding presence must take effect for watchers immediately, not at the next disconnect.
+    if (input.privacy?.showPresence !== undefined) {
+      if (input.privacy.showPresence) {
+        const [state] = await runtime.presence.status([auth.userId]);
+        if (state) await runtime.presence.announce(auth.userId, state.online, state.lastSeenAt);
+      } else {
+        await runtime.presence.announce(auth.userId, false, null, true);
+      }
+    }
     return getMe(db, auth.userId);
   });
 }

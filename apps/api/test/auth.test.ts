@@ -122,7 +122,7 @@ describe('login', () => {
     expect(res.statusCode).toBe(200);
     expect(cookieOf(res)).toBeDefined();
     const actions = await t.db.selectFrom('audit_events').select('action').where('user_id', '=', user.id).orderBy('id').execute();
-    expect(actions.map((a) => a.action)).toEqual(['auth.register', 'auth.login']);
+    expect(actions.map((a) => a.action)).toEqual(['auth.register', 'auth.verification_sent', 'auth.login']);
   });
 });
 

@@ -8,6 +8,11 @@ export type AuditAction =
   | 'auth.logout'
   | 'auth.session_revoked'
   | 'auth.sessions_revoked_others'
+  | 'auth.verification_sent'
+  | 'auth.email_verified'
+  | 'auth.password_reset_requested'
+  | 'auth.password_reset'
+  | 'auth.password_changed'
   | 'account.deleted'
   | 'profile.username_changed';
 

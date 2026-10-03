@@ -176,7 +176,24 @@ describe('configuration', () => {
     expect(() => loadConfig({ NODE_ENV: 'production', DATABASE_URL: 'postgres://x@y/z', WEB_ORIGINS: 'http://chatme.pro' })).toThrow(/COOKIE_SECURE.*METRICS_TOKEN.*https/);
     expect(() =>
       loadConfig({ NODE_ENV: 'production', DATABASE_URL: 'postgres://x@y/z', WEB_ORIGINS: 'https://chatme.pro', COOKIE_SECURE: 'true', METRICS_TOKEN: 'x'.repeat(32) }),
+    ).toThrow(/WEB_BASE_URL.*EMAIL_PROVIDER.*EMAIL_FROM.*DATABASE_SSL/);
+    expect(() =>
+      loadConfig({
+        NODE_ENV: 'production',
+        DATABASE_URL: 'postgres://x@y/z',
+        WEB_ORIGINS: 'https://chatme.pro',
+        COOKIE_SECURE: 'true',
+        METRICS_TOKEN: 'x'.repeat(32),
+        WEB_BASE_URL: 'https://chatme.pro',
+        EMAIL_PROVIDER: 'resend',
+        RESEND_API_KEY: 're_test_key_123',
+        EMAIL_FROM: 'CHATme <no-reply@mail.chatme.pro>',
+        DATABASE_SSL: 'require',
+      }),
     ).not.toThrow();
+    // Resend without a key, or certificate verification without a CA, fails in every environment.
+    expect(() => loadConfig({ DATABASE_URL: 'postgres://x@y/z', EMAIL_PROVIDER: 'resend' })).toThrow(/RESEND_API_KEY/);
+    expect(() => loadConfig({ DATABASE_URL: 'postgres://x@y/z', DATABASE_SSL: 'verify-full' })).toThrow(/DATABASE_CA_CERT/);
   });
 
   it('uses the __Host- cookie prefix when cookies are secure', async () => {

@@ -2,16 +2,28 @@
  * Usage: pnpm db:migrate [latest|up|down]
  * Production deploys run `latest` as a release step before new code takes traffic.
  */
-import { createDatabase } from './database.js';
+import { createDatabase, type SslMode } from './database.js';
 import { assertMigrationSuccess, createMigrator } from './migrate.js';
 
-const url = process.env.DATABASE_URL;
+// Migrations prefer a direct (non-pooled) connection: DDL and long transactions do not belong on a transaction pooler.
+const url = process.env.MIGRATION_DATABASE_URL || process.env.DATABASE_URL;
 if (!url) {
-  console.error('DATABASE_URL is required');
+  console.error('MIGRATION_DATABASE_URL or DATABASE_URL is required');
   process.exit(1);
 }
 const direction = process.argv[2] ?? 'latest';
-const { db } = createDatabase({ url, poolMax: 1 });
+const ssl = (process.env.DATABASE_SSL ?? 'disable') as SslMode;
+if (!['disable', 'require', 'verify-full'].includes(ssl)) {
+  console.error(`Invalid DATABASE_SSL "${ssl}"`);
+  process.exit(1);
+}
+const { db } = createDatabase({
+  url,
+  poolMax: 1,
+  ssl,
+  caCert: process.env.DATABASE_CA_CERT?.replace(/\\n/g, '\n'),
+  applicationName: 'chatme-migrate',
+});
 const migrator = createMigrator(db);
 
 try {

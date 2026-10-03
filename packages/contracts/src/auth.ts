@@ -158,3 +158,21 @@ export const updatePreferencesRequestSchema = z
   })
   .partial()
   .strict();
+
+/** Single-use tokens from email links (verification, password reset). 256-bit base64url. */
+export const emailTokenSchema = z.string().regex(/^[A-Za-z0-9_-]{43}$/, 'token_format');
+
+export const verifyEmailRequestSchema = z.object({ token: emailTokenSchema }).strict();
+
+export const forgotPasswordRequestSchema = z.object({ email: emailSchema }).strict();
+
+export const resetPasswordRequestSchema = z.object({ token: emailTokenSchema, password: passwordSchema }).strict();
+
+export const changePasswordRequestSchema = z
+  .object({ currentPassword: z.string().min(1).max(128), newPassword: passwordSchema })
+  .strict()
+  .refine((v) => v.currentPassword !== v.newPassword, { message: 'password_unchanged', path: ['newPassword'] });
+export type VerifyEmailRequest = z.infer<typeof verifyEmailRequestSchema>;
+export type ForgotPasswordRequest = z.infer<typeof forgotPasswordRequestSchema>;
+export type ResetPasswordRequest = z.infer<typeof resetPasswordRequestSchema>;
+export type ChangePasswordRequest = z.infer<typeof changePasswordRequestSchema>;

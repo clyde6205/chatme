@@ -29,6 +29,7 @@ export const ERROR_CODES = [
   'conflict_email',
   'conflict_username',
   'invalid_credentials',
+  'invalid_token',
   'rate_limited',
   'csrf_failed',
   'service_unavailable',

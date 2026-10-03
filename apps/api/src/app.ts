@@ -1,4 +1,6 @@
 import cookie from '@fastify/cookie';
+import websocket from '@fastify/websocket';
+import { REALTIME_CLOSE } from '@chatme/contracts/realtime';
 import cors from '@fastify/cors';
 import helmet from '@fastify/helmet';
 import rateLimit from '@fastify/rate-limit';
@@ -12,11 +14,19 @@ import { errorHandler } from './lib/errors.js';
 import { authRoutes } from './modules/auth/routes.js';
 import { flagRoutes } from './modules/flags/routes.js';
 import { healthRoutes } from './modules/health/routes.js';
+import { realtimeRoutes } from './modules/realtime/routes.js';
 import { sessionRoutes } from './modules/sessions/routes.js';
 import { telemetryRoutes } from './modules/telemetry/routes.js';
 import { userRoutes } from './modules/users/routes.js';
 import { registerAuth } from './plugins/auth.js';
 import { registerMetrics } from './plugins/metrics.js';
+import { createRuntime, type Runtime, type RuntimeOverrides } from './runtime.js';
+
+declare module 'fastify' {
+  interface FastifyInstance {
+    runtime: Runtime;
+  }
+}
 
 /**
  * Paths pino must never print. Fastify's default serializers already omit
@@ -39,6 +49,7 @@ export interface AppDeps {
   db: DB;
   pool: pg.Pool;
   logger?: FastifyServerOptions['logger'];
+  runtime?: RuntimeOverrides;
 }
 
 export async function buildApp(deps: AppDeps) {
@@ -74,6 +85,19 @@ export async function buildApp(deps: AppDeps) {
     maxAge: 600,
   });
   await app.register(cookie);
+  await app.register(websocket, {
+    options: {
+      // Client frames are small control messages; reject anything larger before parsing.
+      maxPayload: 4 * 1024,
+      // Compression costs CPU and memory per socket on small instances and low-end phones.
+      perMessageDeflate: false,
+    },
+    // Normally the gateway has drained every socket before close; this catches the rest.
+    preClose(done) {
+      for (const client of this.websocketServer.clients) client.close(REALTIME_CLOSE.SERVICE_RESTART, 'server restarting');
+      this.websocketServer.close(() => done());
+    },
+  });
   await app.register(rateLimit, {
     global: true,
     max: config.rateLimitGlobalPerMin,
@@ -83,12 +107,15 @@ export async function buildApp(deps: AppDeps) {
   });
 
   const metrics = registerMetrics(app, { config, pool });
+  const runtime = createRuntime({ config, db, log: app.log, registry: metrics.registry, overrides: deps.runtime });
+  app.decorate('runtime', runtime);
   registerAuth(app, { db, config });
 
-  healthRoutes(app, { db });
-  authRoutes(app, { db, config });
-  sessionRoutes(app, { db });
-  userRoutes(app, { db });
+  healthRoutes(app, { db, runtime });
+  authRoutes(app, { db, config, runtime });
+  sessionRoutes(app, { db, runtime });
+  userRoutes(app, { db, runtime });
+  realtimeRoutes(app, { config, gateway: runtime.gateway });
   flagRoutes(app, { db });
   telemetryRoutes(app, { metrics });
 
