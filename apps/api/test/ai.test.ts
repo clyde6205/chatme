@@ -41,7 +41,7 @@ afterAll(async () => {
 });
 beforeEach(async () => {
   await resetDb(t);
-  await t.db.insertInto('feature_flags').values({ key: 'ai.assistant', description: 'AI', enabled: true, rollout_percent: 100 }).execute();
+  await t.db.insertInto('feature_flags').values({ key: 'ai.assistant', description: 'AI', enabled: true, rollout_percent: 100, conditions: '{}' }).execute();
   seen.length = 0;
   mode = 'ok';
 });
