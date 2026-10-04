@@ -1,0 +1,19 @@
+node_modules/
+dist/
+build/
+coverage/
+.turbo/
+.expo/
+*.log
+.env
+.env.*
+!.env.example
+.DS_Store
+*.tsbuildinfo
+# Android local build outputs
+apps/mobile/android/.gradle/
+apps/mobile/android/app/build/
+apps/mobile/android/local.properties
+test-results/
+playwright-report/
+__pycache__/

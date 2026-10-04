@@ -1,0 +1,71 @@
+# CHATme API on Fly.io: HTTP API + WebSocket realtime, one Docker image.
+# Deploy from the repository root:  fly deploy
+# Secrets (never in this file):    fly secrets set DATABASE_URL=... (see docs/deploy-fly.md)
+
+app = "chatme-api"
+# Ashburn, Virginia. Closest Fly region to Supabase us-east-1, where the primary database
+# should live: every request talks to Postgres, so the API sits next to it.
+# Adding regions is described in docs/deploy-fly.md; do it together with database
+# read replicas, not before.
+primary_region = "iad"
+kill_signal = "SIGTERM"
+# The server drains sockets (about 15s worst case) and exits well inside this.
+kill_timeout = "30s"
+swap_size_mb = 256
+
+[build]
+  dockerfile = "apps/api/Dockerfile"
+
+[deploy]
+  # Runs once per deploy in a temporary machine, before any new version takes traffic.
+  # Migrations must stay backward compatible with the version still serving.
+  release_command = "node dist/migrate.js latest"
+  # One machine at a time: the other keeps serving while this one drains and restarts.
+  strategy = "rolling"
+
+[env]
+  NODE_ENV = "production"
+  HOST = "0.0.0.0"
+  PORT = "8080"
+  # Fly's proxy is exactly one hop; X-Forwarded-For beyond it is client-controlled.
+  TRUST_PROXY_HOPS = "1"
+  COOKIE_SECURE = "true"
+  WEB_ORIGINS = "https://chatme.pro,https://www.chatme.pro"
+  WEB_BASE_URL = "https://chatme.pro"
+  EMAIL_PROVIDER = "resend"
+  EMAIL_FROM = "CHATme <no-reply@mail.chatme.pro>"
+  DATABASE_SSL = "verify-full"
+  DATABASE_POOL_MAX = "10"
+  REALTIME_MAX_CONNECTIONS = "2500"
+  REALTIME_MAX_PER_USER = "10"
+  AI_PROVIDER = "none"
+  LOG_LEVEL = "info"
+  NODE_OPTIONS = "--max-old-space-size=384"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  # WebSockets are long-lived: stopping or suspending idle machines would cut live connections.
+  auto_stop_machines = "off"
+  auto_start_machines = true
+  # Two machines so a deploy or a host failure never takes realtime fully offline.
+  min_machines_running = 2
+
+  [http_service.concurrency]
+    # Count connections, not requests: one WebSocket is one connection for its whole life.
+    type = "connections"
+    soft_limit = 2000
+    hard_limit = 2500
+
+  [[http_service.checks]]
+    # Readiness: database reachable and not draining. A draining machine fails this and
+    # the proxy stops sending it new connections while existing ones close.
+    grace_period = "15s"
+    interval = "10s"
+    timeout = "3s"
+    method = "GET"
+    path = "/health/ready"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"

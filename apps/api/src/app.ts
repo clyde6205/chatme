@@ -1,0 +1,151 @@
+import cookie from '@fastify/cookie';
+import websocket from '@fastify/websocket';
+import { REALTIME_CLOSE } from '@chatme/contracts/realtime';
+import cors from '@fastify/cors';
+import helmet from '@fastify/helmet';
+import rateLimit from '@fastify/rate-limit';
+import { CSRF_HEADER } from '@chatme/contracts';
+import Fastify, { type FastifyServerOptions } from 'fastify';
+import { randomUUID } from 'node:crypto';
+import type pg from 'pg';
+import type { Config } from './config.js';
+import type { DB } from './db/database.js';
+import { errorHandler } from './lib/errors.js';
+import { AIGateway } from './modules/ai/gateway.js';
+import { OpenAIProvider } from './modules/ai/openai.js';
+import type { AIProvider } from './modules/ai/provider.js';
+import { aiRoutes } from './modules/ai/routes.js';
+import { authRoutes } from './modules/auth/routes.js';
+import { flagRoutes } from './modules/flags/routes.js';
+import { healthRoutes } from './modules/health/routes.js';
+import { realtimeRoutes } from './modules/realtime/routes.js';
+import { sessionRoutes } from './modules/sessions/routes.js';
+import { telemetryRoutes } from './modules/telemetry/routes.js';
+import { userRoutes } from './modules/users/routes.js';
+import { registerAuth } from './plugins/auth.js';
+import { registerMetrics } from './plugins/metrics.js';
+import { createRuntime, type Runtime, type RuntimeOverrides } from './runtime.js';
+
+declare module 'fastify' {
+  interface FastifyInstance {
+    runtime: Runtime;
+  }
+}
+
+/**
+ * Paths pino must never print. Fastify's default serializers already omit
+ * headers and bodies; these cover any code that logs a request, reply or error object.
+ */
+export const LOG_REDACT_PATHS = [
+  'req.headers.authorization',
+  'req.headers.cookie',
+  'res.headers["set-cookie"]',
+  '*.password',
+  '*.token',
+  '*.password_hash',
+  '*.token_hash',
+  'headers.authorization',
+  'headers.cookie',
+];
+
+export interface AppDeps {
+  config: Config;
+  db: DB;
+  pool: pg.Pool;
+  logger?: FastifyServerOptions['logger'];
+  runtime?: RuntimeOverrides;
+  /** Replaces the configured AI provider (tests). */
+  aiProvider?: AIProvider;
+}
+
+const AI_SYSTEM_PROMPT =
+  'You are the CHATme assistant. Be helpful, concise and kind. Reply in the language the user writes in. ' +
+  'Never ask for passwords or verification codes.';
+
+function createAIGateway(deps: AppDeps): AIGateway | null {
+  const { config, db } = deps;
+  const provider =
+    deps.aiProvider ??
+    (config.ai.provider === 'openai'
+      ? new OpenAIProvider({ apiKey: config.ai.openaiApiKey!, baseUrl: config.ai.openaiBaseUrl, organization: config.ai.openaiOrganization })
+      : null);
+  if (!provider) return null;
+  return new AIGateway(db, provider, {
+    model: config.ai.model || 'test-model',
+    systemPrompt: AI_SYSTEM_PROMPT,
+    dailyTokenBudget: config.ai.dailyTokenBudget,
+    maxOutputTokens: config.ai.maxOutputTokens,
+    timeoutMs: config.ai.timeoutMs,
+  });
+}
+
+export async function buildApp(deps: AppDeps) {
+  const { config, db, pool } = deps;
+  const app = Fastify({
+    logger: deps.logger ?? { level: config.logLevel, redact: { paths: LOG_REDACT_PATHS, censor: '[redacted]' } },
+    // Trust exactly N proxy hops (the load balancer), never arbitrary client-supplied X-Forwarded-For.
+    trustProxy: config.trustProxyHops > 0 ? (_addr: string, hop: number) => hop < config.trustProxyHops : false,
+    bodyLimit: 64 * 1024,
+    genReqId: (req) => {
+      const incoming = req.headers['x-request-id'];
+      return typeof incoming === 'string' && /^[\w-]{8,64}$/.test(incoming) ? incoming : randomUUID();
+    },
+  });
+
+  app.setErrorHandler(errorHandler);
+  app.setNotFoundHandler((req, reply) => reply.status(404).send({ error: { code: 'not_found', requestId: req.id } }));
+  app.addHook('onSend', async (req, reply) => {
+    reply.header('x-request-id', req.id);
+  });
+
+  await app.register(helmet, {
+    // The API serves JSON only; the web app sets its own CSP.
+    contentSecurityPolicy: { directives: { defaultSrc: ["'none'"], frameAncestors: ["'none'"] } },
+    crossOriginResourcePolicy: { policy: 'same-site' },
+  });
+  await app.register(cors, {
+    origin: config.webOrigins,
+    credentials: true,
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    allowedHeaders: ['content-type', 'authorization', CSRF_HEADER, 'x-request-id'],
+    exposedHeaders: ['x-request-id'],
+    maxAge: 600,
+  });
+  await app.register(cookie);
+  await app.register(websocket, {
+    options: {
+      // Client frames are small control messages; reject anything larger before parsing.
+      maxPayload: 4 * 1024,
+      // Compression costs CPU and memory per socket on small instances and low-end phones.
+      perMessageDeflate: false,
+    },
+    // Normally the gateway has drained every socket before close; this catches the rest.
+    preClose(done) {
+      for (const client of this.websocketServer.clients) client.close(REALTIME_CLOSE.SERVICE_RESTART, 'server restarting');
+      this.websocketServer.close(() => done());
+    },
+  });
+  await app.register(rateLimit, {
+    global: true,
+    max: config.rateLimitGlobalPerMin,
+    timeWindow: '1 minute',
+    // In-memory store is per instance. Horizontal scaling must switch to the Redis store (docs/operations.md).
+    allowList: (req) => req.url.startsWith('/health/'),
+  });
+
+  const metrics = registerMetrics(app, { config, pool });
+  const runtime = createRuntime({ config, db, log: app.log, registry: metrics.registry, overrides: deps.runtime });
+  app.decorate('runtime', runtime);
+  registerAuth(app, { db, config });
+
+  healthRoutes(app, { db, runtime });
+  authRoutes(app, { db, config, runtime });
+  sessionRoutes(app, { db, runtime });
+  userRoutes(app, { db, runtime });
+  realtimeRoutes(app, { config, gateway: runtime.gateway });
+  aiRoutes(app, { db, gateway: createAIGateway(deps) });
+  flagRoutes(app, { db });
+  telemetryRoutes(app, { metrics });
+
+  return app;
+}

@@ -1,7 +1,0 @@
-import type { ReactionResponse } from 'stream-chat';
-import type { DefaultStreamChatGenerics } from '../../types/types';
-import { TableRowJoinedUser } from '../types';
-export declare const getReactions: <StreamChatGenerics extends DefaultStreamChatGenerics = DefaultStreamChatGenerics>({ reactions, }: {
-    reactions: TableRowJoinedUser<'reactions'>[];
-}) => ReactionResponse<StreamChatGenerics>[];
-//# sourceMappingURL=getReactions.d.ts.map

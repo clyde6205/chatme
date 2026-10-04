@@ -1,1 +1,0 @@
-{"version":3,"file":"getReactions.d.ts","sourceRoot":"","sources":["../../../../src/store/apis/getReactions.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,gBAAgB,EAAE,MAAM,aAAa,CAAC;AAEpD,OAAO,KAAK,EAAE,yBAAyB,EAAE,MAAM,mBAAmB,CAAC;AAGnE,OAAO,EAAE,kBAAkB,EAAE,MAAM,UAAU,CAAC;AAE9C,eAAO,MAAM,YAAY;eAKZ,mBAAmB,WAAW,CAAC,EAAE;4CAQ7C,CAAC"}

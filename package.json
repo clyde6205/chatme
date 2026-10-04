@@ -1,36 +1,33 @@
 {
-  "name": "chatmepro",
-  "version": "1.0.0",
-  "main": "node_modules/expo/AppEntry.js",
-  "scripts": {
-    "start": "expo start",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
-    "web": "expo start --web"
+  "name": "chatme",
+  "private": true,
+  "packageManager": "pnpm@10.28.0",
+  "engines": {
+    "node": ">=22"
   },
-  "dependencies": {
-    "@react-native-async-storage/async-storage": "2.2.0",
-    "@react-native-community/netinfo": "11.4.1",
-    "expo": "~54.0.30",
-    "expo-file-system": "~19.0.21",
-    "expo-image-manipulator": "~14.0.8",
-    "expo-linking": "~8.0.11",
-    "expo-sqlite": "^16.0.10",
-    "expo-status-bar": "~3.0.9",
-    "react": "19.1.0",
-    "react-native": "0.81.5",
-    "react-native-gesture-handler": "~2.28.0",
-    "react-native-reanimated": "~4.1.1",
-    "react-native-safe-area-context": "~5.6.0",
-    "react-native-sqlite-storage": "^6.0.1",
-    "react-native-svg": "15.12.1",
-    "react-native-voice": "^0.3.0",
-    "stream-chat-expo": "^5.45.2",
-    "stream-chat-react-native": "^6.0.0",
-    "stream-chat-react-native-core": "^8.12.0"
+  "scripts": {
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "i18n:check": "pnpm --filter @chatme/i18n check",
+    "db:migrate": "pnpm --filter @chatme/api migrate",
+    "dev:api": "pnpm --filter @chatme/api dev",
+    "dev:web": "pnpm --filter @chatme/web dev",
+    "lint": "eslint .",
+    "check:android-id": "node scripts/check-android-id.mjs"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "@node-rs/argon2"
+    ]
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@eslint/js": "^9.39.5",
+    "eslint": "^9.39.5",
+    "globals": "^17.13.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.71.0"
   },
-  "private": true
+  "type": "module"
 }

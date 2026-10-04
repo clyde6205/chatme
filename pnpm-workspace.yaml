@@ -1,0 +1,6 @@
+# apps/mobile is intentionally outside the workspace until it is rebuilt on the
+# shared packages (Phase 1b); React Native needs a hoisted node_modules layout.
+packages:
+  - apps/api
+  - apps/web
+  - packages/*
