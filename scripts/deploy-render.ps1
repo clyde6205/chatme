@@ -9,10 +9,10 @@
 
   What it does, in order. It stops at the first failure.
     1. Checks the branch, that it matches GitHub, and that no secrets are committed.
-    2. Collects secrets without echoing them: from environment variables of the same name,
-       from the encrypted local cache, or from a hidden prompt. METRICS_TOKEN is generated
-       with a cryptographic RNG. Secrets are cached per Windows user with DPAPI in
-       %LOCALAPPDATA%\chatme\render-secrets.xml (outside the repo), so a rerun does not ask again.
+    2. Collects secrets without echoing them, from a hidden prompt (or environment variables of
+       the same name). METRICS_TOKEN is generated with a cryptographic RNG, or reused from the
+       existing Render service. Nothing is written to disk unless you pass -RememberSecrets, which
+       caches them DPAPI-encrypted for your Windows user in %LOCALAPPDATA%\chatme\render-secrets.xml.
     3. Checks with Resend that the EMAIL_FROM domain is verified (read-only, sends nothing).
     4. Builds the real Dockerfile and smoke-tests the image against a throwaway local Postgres.
     5. Runs the database migrations against Supabase (forward only, never drops anything).
@@ -20,7 +20,8 @@
     7. Creates or updates the Render web service and its environment variables, deploys it,
        and follows the deploy until it is live or fails.
     8. Checks the live service: health, metrics guard, CORS, WebSocket upgrade.
-    9. Adds the custom domain on Render and prints the DNS record to create.
+    9. Only with -AddCustomDomain: adds api.chatme.pro to the Render service and prints the DNS
+       record to create. The script never changes DNS.
 
   Render settings are fixed to the agreed configuration: Docker, apps/api/Dockerfile, build
   context = repo root, health check /health/ready, one instance, region ohio. Auto-deploy is off
@@ -45,8 +46,10 @@ param(
   [string] $NodeImage,
   # Skip the local Docker build, smoke test and preflight (migrations then need pnpm, or a paid plan).
   [switch] $SkipDocker,
-  # Do not add the custom domain on Render.
-  [switch] $NoCustomDomain,
+  # Add api.chatme.pro to the Render service (off by default; DNS is never changed).
+  [switch] $AddCustomDomain,
+  # Cache the secrets DPAPI-encrypted on this PC so a rerun does not ask again (off by default).
+  [switch] $RememberSecrets,
   # Validate and plan only: no migrations, no Render changes.
   [switch] $DryRun,
   # Do not ask for the final confirmation.
@@ -70,7 +73,7 @@ $Image = 'chatme-api:render-test'
 $HealthPath = '/health/ready'
 $RealtimePath = '/v1/realtime'
 $OnWindows = ($PSVersionTable.PSEdition -eq 'Desktop') -or ((Test-Path variable:IsWindows) -and $IsWindows)
-$CacheFile = if ($OnWindows) { Join-Path $env:LOCALAPPDATA 'chatme\render-secrets.xml' } else { $null }
+$CacheFile = if ($OnWindows -and $RememberSecrets) { Join-Path $env:LOCALAPPDATA 'chatme\render-secrets.xml' } else { $null }
 $Secrets = @{}
 $Results = New-Object System.Collections.Generic.List[string]
 
@@ -303,11 +306,12 @@ foreach ($f in @('apps/api/Dockerfile', 'apps/api/src/config.ts', 'apps/api/src/
 }
 
 # Secret-commit check: tracked .env files and well-known key formats. Prints locations only.
+# chatme:chatme is the throwaway local test database credential used by CI and the smoke test.
 $envFiles = @(& git ls-files | Where-Object { $_ -match '(^|/)\.env($|\.)' -and $_ -notmatch '\.env\.example$' })
 if ($envFiles.Count -gt 0) { Stop-Deploy "Tracked env files found: $($envFiles -join ', '). Remove them from git." }
 $pattern = 're_[A-Za-z0-9_]{20,}|rnd_[A-Za-z0-9]{16,}|sk-(proj-)?[A-Za-z0-9_-]{20,}|-----BEGIN [A-Z ]*PRIVATE KEY-----|postgres(ql)?://[^:/@[:space:]]+:[^@[:space:]]+@'
 $grep = Invoke-Native git @('grep', '-I', '-n', '-E', $pattern, '--', '.', ':!pnpm-lock.yaml') -Quiet -AllowFail
-$hits = @($grep.Output -split "`n" | Where-Object { $_ } | Where-Object { $_ -notmatch '@(localhost|127\.0\.0\.1|postgres|db)[:/]' })
+$hits = @($grep.Output -split "`n" | Where-Object { $_ } | Where-Object { $_ -notmatch '@(localhost|127\.0\.0\.1|postgres|db)[:/]' -and $_ -notmatch '://chatme:chatme@' })
 if ($hits.Count -gt 0) {
   $locations = $hits | ForEach-Object { ($_ -split ':')[0..1] -join ':' }
   Stop-Deploy "Possible committed secrets at: $($locations -join ', ')"
@@ -317,9 +321,11 @@ Write-Ok 'no committed secrets or .env files found'
 # =================================================================== 2. secrets
 
 Write-Step 'Collecting secrets (input is hidden; nothing is printed)'
-if ($ResetSecrets -and $CacheFile -and (Test-Path $CacheFile)) { Remove-Item $CacheFile; Write-Info 'Local secret cache deleted' }
+$cachePath = if ($OnWindows) { Join-Path $env:LOCALAPPDATA 'chatme\render-secrets.xml' } else { $null }
+if ($ResetSecrets -and $cachePath -and (Test-Path $cachePath)) { Remove-Item $cachePath; Write-Info 'Local secret cache deleted' }
 $cache = Read-SecretCache
-if (-not $CacheFile) { Write-Warn2 'Not on Windows: secrets are not cached between runs' }
+if ($RememberSecrets -and -not $OnWindows) { Write-Warn2 '-RememberSecrets works only on Windows; secrets are not cached' }
+if (-not $CacheFile) { Write-Info 'Secrets are kept in memory only and are not written to disk' }
 
 $Secrets['RENDER_API_KEY'] = Get-Secret 'RENDER_API_KEY' 'Render API key (Render dashboard > Account Settings > API Keys)' $cache
 if ((Get-Plain $Secrets['RENDER_API_KEY']) -notmatch '^rnd_') { Write-Warn2 'RENDER_API_KEY does not start with rnd_' }
@@ -381,6 +387,9 @@ $EnvVars = [ordered]@{
   METRICS_TOKEN          = $null
 }
 $SecretNames = @('DATABASE_URL', 'REALTIME_DATABASE_URL', 'MIGRATION_DATABASE_URL', 'RESEND_API_KEY', 'METRICS_TOKEN')
+# What goes to Render. MIGRATION_DATABASE_URL is read only by the migration command; on the free
+# plan Render never runs it (no Pre-Deploy Command), so the value is not stored on Render at all.
+$RenderEnvNames = @($EnvVars.Keys | Where-Object { $Plan -ne 'free' -or $_ -ne 'MIGRATION_DATABASE_URL' })
 
 # =================================================================== 4. Resend domain
 
@@ -419,7 +428,9 @@ if ($OwnerId) {
   Write-Host '    Workspaces:'
   for ($i = 0; $i -lt $owners.Count; $i++) { Write-Host "      [$i] $($owners[$i].name) ($($owners[$i].id))" }
   $pick = Read-Host 'Number of the workspace to deploy into'
-  $owner = $owners[[int]$pick]
+  $n = -1
+  if (-not [int]::TryParse($pick, [ref]$n) -or $n -lt 0 -or $n -ge $owners.Count) { Stop-Deploy "'$pick' is not one of the listed numbers" }
+  $owner = $owners[$n]
 }
 Write-Ok "Render workspace: $($owner.name) ($($owner.id))"
 
@@ -429,12 +440,22 @@ if ($service) {
   Write-Ok "service $ServiceName exists ($($service.id)); it will be updated and redeployed"
   $d = $service.serviceDetails
   if ($service.type -ne 'web_service') { Stop-Deploy "$ServiceName exists but is a $($service.type), not a web service" }
-  if ($service.branch -ne $Branch) { Write-Warn2 "service branch is '$($service.branch)', expected '$Branch' (change it in the dashboard)" }
-  if ($d.runtime -ne 'docker') { Stop-Deploy "service runtime is '$($d.runtime)', expected docker" }
-  if ($d.PSObject.Properties['healthCheckPath'] -and $d.healthCheckPath -ne $HealthPath) { Write-Warn2 "health check path is '$($d.healthCheckPath)', expected $HealthPath" }
-  if ($d.numInstances -gt 1) { Write-Warn2 'service runs more than one instance; presence needs exactly one on Render' }
+  # An existing service is only updated when it already matches the agreed configuration.
+  if ($service.branch -ne $Branch) { Stop-Deploy "Existing service deploys branch '$($service.branch)', not '$Branch'. Not touching it." }
+  if ($d.runtime -ne 'docker') { Stop-Deploy "Existing service runtime is '$($d.runtime)', expected docker. Not touching it." }
+  if ($d.numInstances -gt 1) { Stop-Deploy 'Existing service runs more than one instance; presence needs exactly one on Render. Not touching it.' }
   $edd = $d.envSpecificDetails
-  if ($edd -and $edd.dockerfilePath -notmatch '^(\./)?apps/api/Dockerfile$') { Write-Warn2 "Dockerfile path is '$($edd.dockerfilePath)', expected ./apps/api/Dockerfile" }
+  if ($edd -and $edd.dockerfilePath -notmatch '^(\./)?apps/api/Dockerfile$') { Stop-Deploy "Existing service uses Dockerfile '$($edd.dockerfilePath)', expected ./apps/api/Dockerfile. Not touching it." }
+  if ($d.PSObject.Properties['healthCheckPath'] -and $d.healthCheckPath -ne $HealthPath) { Write-Warn2 "health check path is '$($d.healthCheckPath)', expected $HealthPath" }
+  if ($service.PSObject.Properties['autoDeploy'] -and $service.autoDeploy -eq 'yes') { Write-Warn2 'auto-deploy is on: a push to the branch deploys without running migrations first' }
+  # Keep the METRICS_TOKEN already on the service instead of rotating it on every run.
+  $onService = Get-Items (Invoke-Render GET "/services/$($service.id)/env-vars?limit=100") 'envVar'
+  $mt = $onService | Where-Object { $_.key -eq 'METRICS_TOKEN' } | Select-Object -First 1
+  if ($mt -and $mt.value -and $mt.value.Length -ge 24) {
+    $Secrets['METRICS_TOKEN'] = New-Secure $mt.value
+    Save-SecretCache
+    Write-Info 'METRICS_TOKEN: keeping the value already on the service'
+  }
 } else {
   Write-Info "service $ServiceName does not exist yet; it will be created"
 }
@@ -494,7 +515,7 @@ if ($DryRun) {
   Write-Step 'Dry run: planned Render configuration (secrets redacted)'
   Write-Info "service=$ServiceName type=web_service runtime=docker plan=$Plan region=$Region instances=1 branch=$Branch autoDeploy=no"
   Write-Info "dockerfilePath=./apps/api/Dockerfile dockerContext=. healthCheckPath=$HealthPath"
-  foreach ($k in $EnvVars.Keys) { if ($SecretNames -contains $k) { Write-Info "$k=(secret, set)" } else { Write-Info "$k=$($EnvVars[$k])" } }
+  foreach ($k in $RenderEnvNames) { if ($SecretNames -contains $k) { Write-Info "$k=(secret, set)" } else { Write-Info "$k=$($EnvVars[$k])" } }
   Write-Ok 'dry run finished; no migrations run and nothing changed on Render'
   Write-Summary
   exit 0
@@ -503,7 +524,12 @@ if ($DryRun) {
 # =================================================================== 7. confirmation
 
 Write-Host ''
-Write-Host "Ready to: migrate the Supabase database (forward only), then $(if ($service) { 'update and redeploy' } else { 'create' }) Render service '$ServiceName' ($Plan, $Region, 1 instance) from $Branch @ $($head.Substring(0,8))."
+Write-Host 'About to change these things, and nothing else:' -ForegroundColor White
+Write-Host "  Supabase: run forward-only migrations on host $($migUri.Host) (database $($migUri.AbsolutePath.TrimStart('/'))). Make sure this is your TEST project."
+if ($service) { Write-Host "  Render:   update $($RenderEnvNames.Count) env vars on existing service '$ServiceName' ($($service.id)) and redeploy it" }
+else { Write-Host "  Render:   create service '$ServiceName' ($Plan, $Region, 1 instance, auto-deploy off) with $($RenderEnvNames.Count) env vars, and deploy it" }
+Write-Host "  Source:   $RepoUrl $Branch @ $($head.Substring(0,8))"
+if ($AddCustomDomain) { Write-Host "  Render:   add custom domain $ApiDomain to the service (DNS is not changed)" }
 if (-not $Yes) {
   $ans = Read-Host 'Type YES to continue'
   if ($ans -ne 'YES') { Stop-Deploy 'Stopped at confirmation; nothing was changed' }
@@ -545,7 +571,10 @@ if ($haveDocker) {
   Write-Step 'Preflight: booting the image locally with the production settings against Supabase'
   $pf = "chatme-preflight-$PID"
   $passNames = @('DATABASE_URL', 'REALTIME_DATABASE_URL', 'RESEND_API_KEY', 'METRICS_TOKEN')
-  $runArgs = @('run', '-d', '--name', $pf, '-p', '127.0.0.1:18081:8080', '-e', 'WORKERS_ENABLED=false')
+  # WORKERS_ENABLED=false: the preflight never sends email. FLY_MACHINE_ID is the API's existing
+  # instance-id setting (config.ts); a unique value keeps this local container from sharing the
+  # id "local-1" with the instance already running on Render. Neither is sent to Render.
+  $runArgs = @('run', '-d', '--name', $pf, '-p', '127.0.0.1:18081:8080', '-e', 'WORKERS_ENABLED=false', '-e', "FLY_MACHINE_ID=preflight-$PID")
   foreach ($k in $EnvVars.Keys) {
     if ($k -eq 'MIGRATION_DATABASE_URL') { continue }
     if ($SecretNames -contains $k) { $runArgs += @('-e', $k) } else { $runArgs += @('-e', "$k=$($EnvVars[$k])") }
@@ -576,7 +605,7 @@ Write-Step 'Configuring the Render service'
 $deployId = $null
 if (-not $service) {
   $envList = @()
-  foreach ($k in $EnvVars.Keys) {
+  foreach ($k in $RenderEnvNames) {
     $v = $EnvVars[$k]
     if ($SecretNames -contains $k) { $v = Get-Plain $Secrets[$k] }
     $envList += @{ key = $k; value = $v }
@@ -606,12 +635,12 @@ if (-not $service) {
   if ($created.PSObject.Properties['deployId']) { $deployId = $created.deployId }
   Write-Ok "created service $ServiceName ($($service.id))"
 } else {
-  foreach ($k in $EnvVars.Keys) {
+  foreach ($k in $RenderEnvNames) {
     $v = $EnvVars[$k]
     if ($SecretNames -contains $k) { $v = Get-Plain $Secrets[$k] }
     Invoke-Render PUT "/services/$($service.id)/env-vars/$k" @{ value = $v } | Out-Null
   }
-  Write-Ok "updated $($EnvVars.Count) environment variables (others on the service left untouched)"
+  Write-Ok "set $($RenderEnvNames.Count) environment variables (others on the service left untouched)"
 }
 Write-Info "Dashboard: $($service.dashboardUrl)"
 
@@ -675,7 +704,10 @@ if ($ws -eq 4001) { Write-Ok 'Render passes WebSocket upgrades (unauthenticated 
 
 # =================================================================== 13. custom domain
 
-if (-not $NoCustomDomain) {
+if (-not $AddCustomDomain) {
+  Write-Step "Custom domain $ApiDomain"
+  Write-Info 'Skipped: nothing was added on Render and DNS was not touched. Rerun with -AddCustomDomain when you want it.'
+} else {
   Write-Step "Custom domain $ApiDomain"
   $domains = Get-Items (Invoke-Render GET "/services/$($service.id)/custom-domains?limit=20") 'customDomain'
   $cd = $domains | Where-Object { $_.name -eq $ApiDomain } | Select-Object -First 1
@@ -710,4 +742,4 @@ if (-not $NoCustomDomain) {
 Write-Summary
 Write-Host ''
 Write-Host "Service: $($service.dashboardUrl)"
-Write-Host 'METRICS_TOKEN is stored only in Render and in your encrypted local cache. It was not printed.'
+Write-Host 'METRICS_TOKEN was not printed. It is stored on Render (and in your encrypted cache only if you used -RememberSecrets).'
